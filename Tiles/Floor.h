@@ -1,6 +1,6 @@
 #ifndef FLOOR_H
 #define FLOOR_H
-#include "GraphicalUI.h"
+#include "../GraphicalUI.h"
 #include "Tile.h"
 
 class Floor : public virtual Tile{

@@ -9,7 +9,7 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
 
-file(GLOB SOURCES "*.cpp")
+file(GLOB SOURCES "*.cpp" "UI/*.cpp" "Tiles/*.cpp")
 
 add_executable(DungeonCrawler ${SOURCES})
 

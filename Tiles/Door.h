@@ -1,6 +1,6 @@
 #ifndef DUNGEONCRAWLER_DOOR_H
 #define DUNGEONCRAWLER_DOOR_H
-#include "Passive.h"
+#include "../Passive.h"
 #include "Floor.h"
 #include "Wall.h"
 

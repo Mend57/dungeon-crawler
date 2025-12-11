@@ -1,7 +1,7 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 #include <vector>
-#include "Tile.h"
+#include "Tiles/Tile.h"
 #include "Character.h"
 
 class Level {

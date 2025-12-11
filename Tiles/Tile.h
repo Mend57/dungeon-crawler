@@ -1,7 +1,7 @@
 #ifndef TILE_H
 #define TILE_H
 #include <QLabel>
-#include "Character.h"
+#include "../Character.h"
 
 class Tile {
   private:

@@ -1,10 +1,10 @@
 #include "Level.h"
 #include "GraphicalUI.h"
-#include "Door.h"
-#include "Pit.h"
-#include "Portal.h"
-#include "Ramp.h"
-#include "Switch.h"
+#include "Tiles/Door.h"
+#include "Tiles/Pit.h"
+#include "Tiles/Portal.h"
+#include "Tiles/Ramp.h"
+#include "Tiles/Switch.h"
 
 Level::Level(const int height, const int width, AbstractController* ui) : height(height), width(width) {
     tileMap.resize(height);

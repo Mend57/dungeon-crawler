@@ -3,8 +3,8 @@
 #include <map>
 #include <QDir>
 #include <QString>
-#include "StartScreen.h"
-#include "MainWindow.h"
+#include "UI/StartScreen.h"
+#include "UI/MainWindow.h"
 #include "AbstractView.h"
 #include "AbstractController.h"
 

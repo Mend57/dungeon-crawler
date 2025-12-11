@@ -1,5 +1,5 @@
 #include "Tile.h"
-#include "GraphicalUI.h"
+#include "../GraphicalUI.h"
 
 bool Tile::onLeave(Tile* destTile, Character* who){
   if (!hasCharacter() || character != who || destTile == nullptr || destTile->hasCharacter()) return false;

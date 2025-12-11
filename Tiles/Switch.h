@@ -1,6 +1,6 @@
 #ifndef DUNGEONCRAWLER_SWITCH_H
 #define DUNGEONCRAWLER_SWITCH_H
-#include "Active.h"
+#include "../Active.h"
 #include "Floor.h"
 
 class Switch : public Floor, public Active {

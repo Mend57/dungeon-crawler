@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "GraphicalUI.h"
+#include "../GraphicalUI.h"
 
 class GraphicalUI;
 

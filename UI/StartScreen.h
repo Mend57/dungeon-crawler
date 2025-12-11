@@ -2,7 +2,7 @@
 #define DUNGEONCRAWLER_STARTSCREEN_H
 #include <QLabel>
 #include <QDialog>
-#include "GraphicalUI.h"
+#include "../GraphicalUI.h"
 #include <QPushButton>
 #include <QVBoxLayout>
 
