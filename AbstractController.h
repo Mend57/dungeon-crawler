@@ -6,7 +6,6 @@ class AbstractController {
     public:
       virtual ~AbstractController() = default;
       virtual Input move() = 0;
-
 };
 
 #endif

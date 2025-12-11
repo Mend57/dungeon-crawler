@@ -1,5 +1,4 @@
 #include "Tile.h"
-
 #include "GraphicalUI.h"
 
 bool Tile::onLeave(Tile* destTile, Character* who){

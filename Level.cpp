@@ -1,10 +1,7 @@
 #include "Level.h"
-
-#include "Door.h"
-#include "Floor.h"
 #include "GraphicalUI.h"
+#include "Door.h"
 #include "Pit.h"
-#include "Wall.h"
 #include "Portal.h"
 #include "Ramp.h"
 #include "Switch.h"

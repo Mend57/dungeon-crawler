@@ -1,7 +1,5 @@
 #ifndef TILE_H
 #define TILE_H
-#include <iostream>
-#include <utility>
 #include <QLabel>
 #include "Character.h"
 
@@ -20,6 +18,9 @@ class Tile {
 
   public:
     virtual ~Tile() = default;
+    virtual void setLabel();
+    virtual std::pair<bool, Tile*> onEnter(Character* who) = 0;
+    virtual bool onLeave(Tile* destTile, Character* who);
     std::string getTexture(){return texture;}
     Character* getCharacter(){return character;}
     int getRow() const{return row;}
@@ -28,9 +29,6 @@ class Tile {
     void setTexture(std::string texture) {this->texture = std::move(texture);}
     bool hasCharacter(){return character != nullptr;}
     QLabel* getLabel() {return label;}
-    virtual void setLabel();
-    virtual std::pair<bool, Tile*> onEnter(Character* who) = 0;
-    virtual bool onLeave(Tile* destTile, Character* who);
     bool moveTo(Tile* destTile, Character* who);
 };
 

@@ -1,6 +1,5 @@
 #include "GraphicalUI.h"
 
-
 std::map<std::string, QPixmap> GraphicalUI::floorTextures;
 std::map<std::string, QPixmap> GraphicalUI::portalTextures;
 std::map<std::string, QPixmap> GraphicalUI::stringToLabel;
@@ -41,8 +40,7 @@ void GraphicalUI::addFilesToMap(std::map<std::string, QPixmap>& map, const QFile
     }
 }
 
-void GraphicalUI::switchWindow()
-{
+void GraphicalUI::switchWindow() {
     startScreen->hide();
     mainWindow->show();
 }
@@ -55,6 +53,3 @@ void GraphicalUI::buildStringToLabelMap() {
     stringToLabel["/"] = getTexture("door_opened");
     stringToLabel["?"] = getTexture("switch");
 }
-
-void GraphicalUI::draw(Level *level){};
-Input GraphicalUI::move(){};

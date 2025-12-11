@@ -1,7 +1,6 @@
 #include "StartScreen.h"
 #include "ui_StartScreen.h"
 
-
 StartScreen::StartScreen(GraphicalUI* gui, QWidget *parent) : QDialog(parent), ui(new Ui::StartScreen), gui(gui) {
     ui->setupUi(this);
 

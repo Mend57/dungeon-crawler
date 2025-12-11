@@ -1,6 +1,7 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 #include "AbstractController.h"
+
 class Tile;
 
 class Character {
@@ -15,7 +16,5 @@ class Character {
       void setTile(Tile* tile){this->tile = tile;}
       AbstractController* getController(){return controller;}
 };
-
-
 
 #endif

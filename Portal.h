@@ -2,7 +2,6 @@
 #define PORTAL_H
 #include "Tile.h"
 
-
 class Portal : public Tile {
     private:
       Tile* destination;
@@ -15,7 +14,5 @@ class Portal : public Tile {
       void setLabel(int textureIndex) {label->setPixmap(GraphicalUI::getPortalTexture(portalTextures.at(textureIndex)));}
       std::pair<bool, Tile*> onEnter(Character* who) override {return {!(destination->hasCharacter()), destination};}
 };
-
-
 
 #endif

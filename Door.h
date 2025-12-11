@@ -10,14 +10,13 @@ class Door : public Floor, public Wall, public Passive {
 
   public:
     Door(const int row, const int column) : Tile(row, column, "X"), Floor(row,column), Wall(row,column), isDoorOpen(false){}
-
     bool isOpen() const {return isDoorOpen;}
+    std::pair<bool, Tile*> onEnter(Character* who) override {return isDoorOpen ? Floor::onEnter(who) :  Wall::onEnter(who);}
     void notify() override {
       isDoorOpen = !isDoorOpen;
       setTexture(isDoorOpen ? "/" : "X");
       setLabel();
     }
-    std::pair<bool, Tile*> onEnter(Character* who) override {return isDoorOpen ? Floor::onEnter(who) :  Wall::onEnter(who);}
 };
 
 #endif

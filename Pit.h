@@ -1,6 +1,6 @@
 #ifndef DUNGEONCRAWLER_PIT_H
 #define DUNGEONCRAWLER_PIT_H
-#include "Tile.h"
+#include "Floor.h"
 
 class Pit : public Floor {
     public:

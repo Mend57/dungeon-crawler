@@ -1,7 +1,7 @@
 #ifndef DUNGEONCRAWLER_H
 #define DUNGEONCRAWLER_H
 
-#include "TerminalUI.h"
+#include "AbstractView.h"
 
 class DungeonCrawler {
   private:
@@ -25,7 +25,5 @@ class DungeonCrawler {
       }
     }
 };
-
-
 
 #endif
