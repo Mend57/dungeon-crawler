@@ -6,16 +6,21 @@ GraphicalUI::GraphicalUI() {
     QDir dirTextures("../textures");
     QDir dirChar("../textures/char");
     QDir dirFloor("../textures/floor");
+    QDir dirPortal("../textures/portal");
     QStringList filters;
     filters << "*.png";
 
     dirTextures.setNameFilters(filters);
     dirChar.setNameFilters(filters);
     dirFloor.setNameFilters(filters);
+    dirPortal.setNameFilters(filters);
 
     addFilesToMap(textures, dirTextures.entryInfoList());
     addFilesToMap(characterTextures, dirChar.entryInfoList());
     addFilesToMap(floorTextures, dirFloor.entryInfoList());
+    addFilesToMap(portalTextures, dirPortal.entryInfoList());
+
+    buildStringToLabelMap();
 
     startScreen = new StartScreen(this);
     mainWindow = new MainWindow(this);
@@ -39,3 +44,11 @@ void GraphicalUI::switchWindow()
     mainWindow->show();
 }
 
+void GraphicalUI::buildStringToLabelMap() {
+    stringToLabel["#"] = getTexture("wall1");
+    stringToLabel["_"] = getTexture("pit");
+    stringToLabel["<"] = getTexture("ramp");
+    stringToLabel["X"] = getTexture("door_closed");
+    stringToLabel["/"] = getTexture("door_opened");
+    stringToLabel["?"] = getTexture("switch");
+}

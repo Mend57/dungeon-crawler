@@ -15,6 +15,7 @@ class Door : public Floor, public Wall, public Passive {
     void notify() override {
       isDoorOpen = !isDoorOpen;
       setTexture(isDoorOpen ? "/" : "X");
+      setLabel();
     }
     std::pair<bool, Tile*> onEnter(Character* who) override {return isDoorOpen ? Floor::onEnter(who) :  Wall::onEnter(who);}
 };

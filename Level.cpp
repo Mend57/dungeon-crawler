@@ -57,7 +57,7 @@ Level::Level(const int height, const int width) : height(height), width(width) {
         portal[i+1]->setDestination(portal[i]);
     }
     for (Passive* passiveObj : passiveObjects) switchTile->attach(passiveObj);
-    placeCharacter(new Character(getTile(1,3), new TerminalUI),1,3);
+    placeCharacter(new Character(getTile(1,3), new GraphicalUI),1,3);
 }
 
 
