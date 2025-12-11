@@ -1,5 +1,6 @@
 #ifndef FLOOR_H
 #define FLOOR_H
+#include "GraphicalUI.h"
 #include "Tile.h"
 
 
@@ -9,10 +10,7 @@ private:
 public:
     Floor(const int row, const int column) : Tile(row, column, "."){}
     std::pair<bool, Tile*> onEnter(Character* who) override{return {true, nullptr};}
-    void setLabel() override {
-        std::string floorTexture = floorTextures.at(rand() % floorTextures.size());
-        label->setPixmap(GraphicalUI::getFloorTexture(floorTexture));
-    }
+    void setLabel() override {label->setPixmap(GraphicalUI::getFloorTexture(floorTextures.at(rand() % floorTextures.size())));}
 };
 
 

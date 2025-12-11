@@ -2,6 +2,8 @@
 #define DUNGEONCRAWLER_ABSTRACTUI_H
 #include "Level.h"
 
+class Level;
+
 class AbstractView {
   public:
     virtual void draw(Level* level) = 0;

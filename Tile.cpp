@@ -1,5 +1,7 @@
 #include "Tile.h"
 
+#include "GraphicalUI.h"
+
 bool Tile::onLeave(Tile* destTile, Character* who){
   if (!hasCharacter() || character != who || destTile == nullptr || destTile->hasCharacter()) return false;
   return true;
@@ -16,3 +18,8 @@ bool Tile::moveTo(Tile* destTile, Character* who){
   who->setTile(destinationTile);
   return true;
 }
+
+void Tile::setLabel() {
+  this->label->setPixmap(GraphicalUI::getLabelFromString(std::move(texture)));
+}
+

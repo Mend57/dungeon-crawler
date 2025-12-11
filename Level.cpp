@@ -2,21 +2,21 @@
 
 #include "Door.h"
 #include "Floor.h"
+#include "GraphicalUI.h"
 #include "Pit.h"
 #include "Wall.h"
 #include "Portal.h"
 #include "Ramp.h"
 #include "Switch.h"
-#include "TerminalUI.h"
 
-Level::Level(const int height, const int width) : height(height), width(width) {
+Level::Level(const int height, const int width, AbstractController* ui) : height(height), width(width) {
     tileMap.resize(height);
     for (int row = 0; row < height; ++row) {
         tileMap[row].resize(width, nullptr);
     }
     std::vector<Portal*> portal;
     std::vector<Passive*> passiveObjects;
-    Switch* switchTile;
+    Switch* switchTile = nullptr;
     int counter = 0;
     for (int row = 0; row < height; row++) {
         for (int col = 0; col < width; col++) {
@@ -55,9 +55,13 @@ Level::Level(const int height, const int width) : height(height), width(width) {
     for (int i = 0; i < portal.size(); i+=2) {
         portal[i]->setDestination(portal[i+1]);
         portal[i+1]->setDestination(portal[i]);
+
+        int textureIndex = i < GraphicalUI::getPortalTextures().size() ? i : textureIndex % i;
+        portal[i]->setLabel(textureIndex);
+        portal[i+1]->setLabel(textureIndex);
     }
-    for (Passive* passiveObj : passiveObjects) switchTile->attach(passiveObj);
-    placeCharacter(new Character(getTile(1,3), new GraphicalUI),1,3);
+    if (switchTile != nullptr) for (Passive* passiveObj : passiveObjects) switchTile->attach(passiveObj);
+    placeCharacter(new Character(getTile(1,3), ui),1,3);
 }
 
 

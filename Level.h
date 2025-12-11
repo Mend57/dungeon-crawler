@@ -1,6 +1,8 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 #include <vector>
+
+#include "AbstractView.h"
 #include "Tile.h"
 #include "Character.h"
 
@@ -24,7 +26,7 @@ class Level {
       };
 
     public:
-      Level(int height, int width);
+      Level(int height, int width, AbstractController* ui);
       ~Level();
 
       int getHeight() const{return height;}
