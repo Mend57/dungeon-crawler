@@ -26,7 +26,7 @@ class GraphicalUI : public AbstractView, public AbstractController{
 
     public:
         GraphicalUI();
-        static QPixmap getLabelFromString(const std::string texture) {return stringToLabel[texture];}
+        static QPixmap getLabelFromString(const std::string& texture) {return stringToLabel[texture];}
         static QPixmap getFloorTexture(const std::string& texture) {return floorTextures[texture];}
         static QPixmap getPortalTexture(const std::string& texture) {return portalTextures[texture];}
         static std::map<std::string, QPixmap> getPortalTextures() {return portalTextures;}

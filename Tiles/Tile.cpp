@@ -19,6 +19,6 @@ bool Tile::moveTo(Tile* destTile, Character* who){
 }
 
 void Tile::setLabel() {
-  this->label->setPixmap(GraphicalUI::getLabelFromString(std::move(texture)));
+  this->label->setPixmap(GraphicalUI::getLabelFromString(texture));
 }
 
