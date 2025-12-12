@@ -19,16 +19,12 @@ public:
     explicit StartScreen(GraphicalUI* gui, QWidget *parent = nullptr);
     ~StartScreen() override;
 
-protected:
-    void resizeEvent(QResizeEvent *event) override;
-
-    private slots:
-        void onNewGameClicked();
+private slots:
+    void onNewGameClicked();
 
 private:
     Ui::StartScreen *ui;
     GraphicalUI* gui;
-    std::string backgroundTexture = "startscreen";
 };
 
 #endif
