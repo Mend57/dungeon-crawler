@@ -22,5 +22,4 @@ private:
     GraphicalUI* gui;
 };
 
-
-#endif //MAINWINDOW_H
+#endif
