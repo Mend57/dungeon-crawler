@@ -53,6 +53,9 @@
      <property name="spacing">
       <number>0</number>
      </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
      <property name="bottomMargin">
       <number>0</number>
      </property>
