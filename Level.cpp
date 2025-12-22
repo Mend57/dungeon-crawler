@@ -53,7 +53,7 @@ Level::Level(const int height, const int width, AbstractController* ui) : height
         portal[i]->setDestination(portal[i+1]);
         portal[i+1]->setDestination(portal[i]);
 
-        int textureIndex = i < GraphicalUI::getPortalTextures().size() ? i : textureIndex % i;
+        int textureIndex = (i / 2) % GraphicalUI::getPortalTextures().size();
         portal[i]->setLabel(textureIndex);
         portal[i+1]->setLabel(textureIndex);
     }
