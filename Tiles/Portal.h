@@ -5,7 +5,7 @@
 class Portal : public Tile {
     private:
       Tile* destination;
-      std::vector<std::string> portalTextures = {"portal1, portal2, portal3"};
+      std::vector<std::string> portalTextures = {"portal1", "portal2", "portal3"};
 
     public:
       Portal(const int row, const int column, Tile* destination) : Tile(row, column, "O"), destination(destination){}

@@ -5,11 +5,11 @@
 
 class DungeonCrawler {
   private:
-    AbstractView* abstractView;
+    AbstractView* ui;
     Level* level;
 
   public:
-    DungeonCrawler(AbstractView* abstractView, Level* level) : abstractView(abstractView), level(level) {}
+    DungeonCrawler(AbstractView* ui, Level* level) : ui(ui), level(level) {}
 
     bool turn(){
       for(Character* character : level->getCharacters()){
@@ -20,7 +20,7 @@ class DungeonCrawler {
         Tile* destTile = level->getTile(currentTile->getRow()+input.getDy(), currentTile->getColumn()+input.getDx());
         currentTile->moveTo(destTile, character);
 
-        abstractView->draw(level);
+        ui->draw(level);
         return true;
       }
     }

@@ -53,3 +53,16 @@ void GraphicalUI::buildStringToLabelMap() {
     stringToLabel["/"] = getTexture("door_opened");
     stringToLabel["?"] = getTexture("switch");
 }
+
+void GraphicalUI::draw(Level* level) {
+    std::vector<std::vector<Tile*>> tileMap = level->getTileMap();
+    for (int row = 0; row < level->getHeight(); row++) {
+        for (int col = 0; col < level->getWidth(); col++) {
+            QLabel* label = tileMap[row][col]->getLabel();
+            label->setMinimumSize(30,30);
+            label->setMaximumSize(66,66);
+            label->setScaledContents(true);
+            mainWindow->addToGridLayout(label, row, col);
+        }
+    }
+}

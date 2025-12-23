@@ -11,7 +11,8 @@ class Tile {
     std::string texture;
 
   protected:
-    QLabel* label;
+    QLabel* label = new QLabel();
+
     Tile(const int row, const int column, std::string texture) : character(nullptr), row(row), column(column), texture(std::move(texture)) {
       Tile::setLabel();
     }

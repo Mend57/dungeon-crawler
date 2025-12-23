@@ -30,8 +30,8 @@ class GraphicalUI : public AbstractView, public AbstractController{
         static QPixmap getFloorTexture(const std::string& texture) {return floorTextures[texture];}
         static QPixmap getPortalTexture(const std::string& texture) {return portalTextures[texture];}
         static std::map<std::string, QPixmap> getPortalTextures() {return portalTextures;}
-        void draw(Level *level) override{};
-        Input move() override{};
+        void draw(Level* level) override;
+        Input move() override{return NULL;};
         QPixmap getTexture(const std::string& texture) {return textures[texture];}
         QPixmap getCharacterTexture(const std::string& texture) {return characterTextures[texture];}
         void switchWindow();
