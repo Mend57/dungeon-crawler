@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>StartScreen</class>
  <widget class="QDialog" name="StartScreen">
+  <property name="styleSheet">
+   <string>background-color: black;</string>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
