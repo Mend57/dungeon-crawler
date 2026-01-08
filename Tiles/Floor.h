@@ -10,7 +10,10 @@ private:
 public:
     Floor(const int row, const int column) : Tile(row, column, "."){Floor::setLabel();}
     std::pair<bool, Tile*> onEnter(Character* who) override{return {true, nullptr};}
-    void setLabel() override {label->setPixmap(GraphicalUI::getFloorTexture(floorTextures.at(rand() % floorTextures.size())));}
+    void setLabel() override {
+        if (getTexture() == ".") label->setPixmap(GraphicalUI::getFloorTexture(floorTextures.at(rand() % floorTextures.size())));
+        else Tile::setLabel();
+    }
 };
 
 #endif

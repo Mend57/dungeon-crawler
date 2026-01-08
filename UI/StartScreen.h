@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "../GraphicalUI.h"
 
+class DungeonCrawler;
 class GraphicalUI;
 
 QT_BEGIN_NAMESPACE
@@ -17,6 +18,7 @@ class StartScreen : public QDialog {
 
 public:
     explicit StartScreen(GraphicalUI* gui, QWidget *parent = nullptr);
+    DungeonCrawler* getDungeonCrawler(){return dungeonCrawler;}
     ~StartScreen() override;
 
 private slots:
@@ -25,6 +27,7 @@ private slots:
 private:
     Ui::StartScreen *ui;
     GraphicalUI* gui;
+    DungeonCrawler* dungeonCrawler;
 };
 
 #endif

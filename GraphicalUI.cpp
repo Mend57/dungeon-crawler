@@ -66,3 +66,5 @@ void GraphicalUI::draw(Level* level) {
         }
     }
 }
+
+Input GraphicalUI::move() {return mainWindow->getInput();}

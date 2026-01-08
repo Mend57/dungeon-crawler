@@ -1,57 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>MainWindow</class>
-    <widget class="QMainWindow" name="MainWindow">
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>800</width>
-                <height>600</height>
-            </rect>
-        </property>
-        <property name="windowTitle">
-            <string>Dungeon Crawler</string>
-        </property>
-
-        <widget class="QWidget" name="centralwidget">
-            <layout class="QHBoxLayout" name="horizontalLayout">
-                <!-- Widget do grid de tiles -->
-                <item>
-                    <widget class="QWidget" name="gridWidget">
-                        <layout class="QGridLayout" name="gridLayout">
-                            <property name="spacing">
-                                <number>0</number>
-                            </property>
-                            <property name="leftMargin">
-                                <number>0</number>
-                            </property>
-                            <property name="rightMargin">
-                                <number>0</number>
-                            </property>
-                            <property name="topMargin">
-                                <number>0</number>
-                            </property>
-                            <property name="bottomMargin">
-                                <number>0</number>
-                            </property>
-                        </layout>
-                    </widget>
-                </item>
-
-                <!-- Widget do painel de botões -->
-                <item>
-                    <widget class="QWidget" name="buttonWidget">
-                        <layout class="QVBoxLayout" name="verticalLayoutButtons"/>
-                    </widget>
-                </item>
-
-            </layout>
-        </widget>
-
-        <widget class="QMenuBar" name="menubar"/>
-        <widget class="QStatusBar" name="statusbar"/>
-    </widget>
-    <resources/>
-    <connections/>
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dungeon Crawler</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+     </layout>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="gridLayoutButtons">
+      <item row="0" column="0">
+       <widget class="QPushButton" name="arrow_up_left"/>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="arrow_up"/>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="arrow_up_right"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="arrow_left"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="arrow_skip"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="arrow_right"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="arrow_down_left"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="arrow_down"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="QPushButton" name="arrow_down_right"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
 </ui>
+
