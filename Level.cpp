@@ -58,7 +58,7 @@ Level::Level(const int height, const int width, AbstractController* ui) : height
         portal[i+1]->setLabel(textureIndex);
     }
     if (switchTile != nullptr) for (Passive* passiveObj : passiveObjects) switchTile->attach(passiveObj);
-    placeCharacter(new Character(getTile(1,3), ui),1,3);
+    placeCharacter(new Character(getTile(2,3), ui),2,3);
 }
 
 

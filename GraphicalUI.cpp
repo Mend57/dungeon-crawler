@@ -1,9 +1,12 @@
 #include "GraphicalUI.h"
 
+#include "Tiles/Door.h"
+#include "Tiles/Pit.h"
+
 std::map<std::string, QPixmap> GraphicalUI::floorTextures;
 std::map<std::string, QPixmap> GraphicalUI::portalTextures;
 std::map<std::string, QPixmap> GraphicalUI::stringToLabel;
-std::map<std::string, QPixmap> characterTextures;
+std::map<std::string, QPixmap> GraphicalUI::characterTextures;
 
 GraphicalUI::GraphicalUI() {
     QDir dirTextures("../textures");
@@ -59,11 +62,21 @@ void GraphicalUI::draw(Level* level) {
     std::vector<std::vector<Tile*>> tileMap = level->getTileMap();
     for (int row = 0; row < level->getHeight(); row++) {
         for (int col = 0; col < level->getWidth(); col++) {
-            QLabel* label = tileMap[row][col]->getLabel();
-            label->setMinimumSize(30,30);
-            label->setMaximumSize(66,66);
+            Tile* pos = tileMap[row][col];
+            QLabel* label = pos->getLabel();
+            label->setFixedSize(30,30);
             label->setScaledContents(true);
+            label->setAttribute(Qt::WA_TranslucentBackground);
             mainWindow->addToGridLayout(label, row, col);
+            if (pos->hasCharacter()) {
+                QLabel* characterLabel = pos->getCharacter()->getLabel();
+                characterLabel->setFixedSize(30,30);
+                characterLabel->setScaledContents(true);
+                characterLabel->setAttribute(Qt::WA_TranslucentBackground);
+                if (dynamic_cast<Pit*>(pos)) characterLabel->lower();
+                else characterLabel->raise();
+                mainWindow->addToGridLayout(characterLabel, row, col);
+            }
         }
     }
 }

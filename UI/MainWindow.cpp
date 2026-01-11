@@ -72,7 +72,7 @@ void MainWindow::resizeEvent(QResizeEvent* event) {
         button.first->setIcon(this->gui->getTexture(button.second));
         button.first->setFixedSize(base, base);
         button.first->setIconSize(QSize(base, base));
-        //button.first->setStyleSheet("border:none");
+        button.first->setStyleSheet("border:none");
     }
 }
 

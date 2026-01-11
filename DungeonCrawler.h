@@ -10,11 +10,13 @@ class DungeonCrawler {
 
   public:
     DungeonCrawler(AbstractView* ui, Level* level) : ui(ui), level(level) {}
+    Level* getLevel(){return level;}
 
     bool turn(){
       for(Character* character : level->getCharacters()){
         Input input = character->getController()->move();
         if(input.getExit() == true) return false;
+        character->setMoveDirection(input);
 
         Tile* currentTile = character->getTile();
         Tile* destTile = level->getTile(currentTile->getRow()+input.getDy(), currentTile->getColumn()+input.getDx());

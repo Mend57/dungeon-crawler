@@ -47,8 +47,6 @@ private:
     Input lastInput = {0,0};
     std::vector<std::pair<QPushButton*, std::string>> buttons;
     void resizeEvent(QResizeEvent* event) override;
-
-
 };
 
 #endif

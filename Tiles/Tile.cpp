@@ -15,6 +15,7 @@ bool Tile::moveTo(Tile* destTile, Character* who){
   this->character = nullptr;
   (destinationTile)->character = who;
   who->setTile(destinationTile);
+  who->setLabel();
   return true;
 }
 

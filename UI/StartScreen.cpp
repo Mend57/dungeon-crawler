@@ -12,7 +12,7 @@ StartScreen::StartScreen(GraphicalUI* gui, QWidget *parent) : QDialog(parent), u
     QPixmap buttonPixmap = this->gui->getTexture("new_game_button");
     ui->newGameButton->setIcon(buttonPixmap);
     ui->newGameButton->setIconSize(buttonPixmap.size());
-    //ui->newGameButton->setStyleSheet("border:none");
+    ui->newGameButton->setStyleSheet("border:none");
 
     connect(ui->newGameButton, &QPushButton::clicked, this, &StartScreen::onNewGameClicked);
 }
