@@ -4,7 +4,7 @@
 MainWindow::MainWindow(GraphicalUI* gui, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), gui(gui) {
     ui->setupUi(this);
 
-    std::vector<std::pair<QPushButton*, std::string>> buttons = {
+    buttons = {
         {ui->arrow_up_left, "arrow_up_left"},
         {ui->arrow_up, "arrow_up"},
         {ui->arrow_up_right, "arrow_up_right"},
@@ -15,8 +15,6 @@ MainWindow::MainWindow(GraphicalUI* gui, QWidget *parent) : QMainWindow(parent),
         {ui->arrow_down, "arrow_down"},
         {ui->arrow_down_right, "arrow_down_right"}
     };
-
-    for(std::pair<QPushButton*, std::string> button : buttons) formatArrow(button);
 
     connect(ui->arrow_up_left, &QPushButton::clicked, this, &MainWindow::onUpLeftArrowClicked);
     connect(ui->arrow_up, &QPushButton::clicked, this, &MainWindow::onUpArrowClicked);
@@ -30,35 +28,28 @@ MainWindow::MainWindow(GraphicalUI* gui, QWidget *parent) : QMainWindow(parent),
 
 }
 
-void MainWindow::formatArrow(std::pair<QPushButton*, std::string> button) {
-    button.first->setIcon(this->gui->getTexture(button.second));
-    button.first->setIconSize(button.first->size());
-    button.first->setCursor(Qt::PointingHandCursor);
-    //button.first->setStyleSheet("border:none");
-}
-
 void MainWindow::onUpLeftArrowClicked() {
-    lastInput = {-1,1};
-    dungeonCrawler->turn();
-}
-void MainWindow::onUpArrowClicked() {
-    lastInput = {0,1};
-    dungeonCrawler->turn();
-}
-void MainWindow::onUpRightArrowClicked() {
-    lastInput = {1,1};
-    dungeonCrawler->turn();
-}
-void MainWindow::onDownLeftArrowClicked() {
     lastInput = {-1,-1};
     dungeonCrawler->turn();
 }
-void MainWindow::onDownArrowClicked() {
+void MainWindow::onUpArrowClicked() {
     lastInput = {0,-1};
     dungeonCrawler->turn();
 }
-void MainWindow::onDownRightArrowClicked() {
+void MainWindow::onUpRightArrowClicked() {
     lastInput = {1,-1};
+    dungeonCrawler->turn();
+}
+void MainWindow::onDownLeftArrowClicked() {
+    lastInput = {-1,1};
+    dungeonCrawler->turn();
+}
+void MainWindow::onDownArrowClicked() {
+    lastInput = {0,1};
+    dungeonCrawler->turn();
+}
+void MainWindow::onDownRightArrowClicked() {
+    lastInput = {1,1};
     dungeonCrawler->turn();
 }
 void MainWindow::onLeftArrowClicked() {
@@ -72,6 +63,17 @@ void MainWindow::onSkipArrowClicked() {
 void MainWindow::onRightArrowClicked() {
     lastInput = {1,0};
     dungeonCrawler->turn();
+}
+void MainWindow::resizeEvent(QResizeEvent* event) {
+    QMainWindow::resizeEvent(event);
+
+    int base = qMin(width(), height()) / 10;
+    for(std::pair<QPushButton*, std::string> button : buttons){
+        button.first->setIcon(this->gui->getTexture(button.second));
+        button.first->setFixedSize(base, base);
+        button.first->setIconSize(QSize(base, base));
+        //button.first->setStyleSheet("border:none");
+    }
 }
 
 MainWindow::~MainWindow() {

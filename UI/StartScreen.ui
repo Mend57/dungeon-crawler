@@ -2,15 +2,12 @@
 <ui version="4.0">
  <class>StartScreen</class>
  <widget class="QDialog" name="StartScreen">
-  <property name="styleSheet">
-   <string>background-color: black;</string>
-  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>520</width>
+    <height>390</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -21,6 +18,9 @@
   </property>
   <property name="windowTitle">
    <string>Dungeon Crawler</string>
+  </property>
+  <property name="styleSheet">
+   <string>background-color: black;</string>
   </property>
   <layout class="QVBoxLayout" name="mainLayout">
    <property name="spacing">
@@ -62,44 +62,12 @@
      <property name="bottomMargin">
       <number>0</number>
      </property>
-     <item>
-      <spacer name="horizontalSpacerLeft">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
+     <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
       <widget class="QPushButton" name="newGameButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="cursor">
         <cursorShape>PointingHandCursor</cursorShape>
        </property>
       </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacerRight">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
     </layout>
    </item>

@@ -6,12 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>551</width>
+    <height>391</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dungeon Crawler</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: black;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -36,50 +39,80 @@
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayoutButtons">
-      <item row="0" column="0">
-       <widget class="QPushButton" name="arrow_up_left"/>
+      <property name="horizontalSpacing">
+       <number>6</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>0</number>
+      </property>
+      <item row="3" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
+       <widget class="QPushButton" name="arrow_down_left">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+       </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QPushButton" name="arrow_up"/>
+      <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
+       <widget class="QPushButton" name="arrow_up">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+       </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QPushButton" name="arrow_up_right"/>
+      <item row="2" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
+       <widget class="QPushButton" name="arrow_left">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+       </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QPushButton" name="arrow_left"/>
+      <item row="2" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
+       <widget class="QPushButton" name="arrow_skip">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+       </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QPushButton" name="arrow_skip"/>
+      <item row="3" column="2" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
+       <widget class="QPushButton" name="arrow_down_right">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+       </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QPushButton" name="arrow_right"/>
+      <item row="3" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
+       <widget class="QPushButton" name="arrow_down">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+       </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QPushButton" name="arrow_down_left"/>
+      <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
+       <widget class="QPushButton" name="arrow_up_right">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+       </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QPushButton" name="arrow_down"/>
+      <item row="2" column="2" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
+       <widget class="QPushButton" name="arrow_right">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+       </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QPushButton" name="arrow_down_right"/>
+      <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
+       <widget class="QPushButton" name="arrow_up_left">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
 </ui>
-
