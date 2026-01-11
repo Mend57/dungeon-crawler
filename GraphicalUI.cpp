@@ -3,6 +3,7 @@
 std::map<std::string, QPixmap> GraphicalUI::floorTextures;
 std::map<std::string, QPixmap> GraphicalUI::portalTextures;
 std::map<std::string, QPixmap> GraphicalUI::stringToLabel;
+std::map<std::string, QPixmap> characterTextures;
 
 GraphicalUI::GraphicalUI() {
     QDir dirTextures("../textures");

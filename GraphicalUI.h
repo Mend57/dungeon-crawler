@@ -17,7 +17,7 @@ class GraphicalUI : public AbstractView, public AbstractController{
         static std::map<std::string, QPixmap> floorTextures;
         static std::map<std::string, QPixmap> portalTextures;
         static std::map<std::string, QPixmap> stringToLabel;
-        std::map<std::string, QPixmap> characterTextures;
+        static std::map<std::string, QPixmap> characterTextures;
         std::map<std::string, QPixmap> textures;
         StartScreen* startScreen;
         MainWindow* mainWindow;
@@ -34,7 +34,7 @@ class GraphicalUI : public AbstractView, public AbstractController{
         void draw(Level* level) override;
         Input move() override;
         QPixmap getTexture(const std::string& texture) {return textures[texture];}
-        QPixmap getCharacterTexture(const std::string& texture) {return characterTextures[texture];}
+        static QPixmap getCharacterTexture(const std::string& texture) {return characterTextures[texture];}
         StartScreen* getStartScreen(){return startScreen;}
         MainWindow* getMainWindow(){return mainWindow;}
         void switchWindow();
