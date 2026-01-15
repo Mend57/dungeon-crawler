@@ -5,8 +5,9 @@
 #include "Tiles/Portal.h"
 #include "Tiles/Ramp.h"
 #include "Tiles/Switch.h"
+#include "Tiles/Levelchanger.h"
 
-Level::Level(const int height, const int width, AbstractController* ui) : height(height), width(width) {
+Level::Level(const int height, const int width, AbstractController* ui, std::string levelDesign) : height(height), width(width), l(levelDesign) {
     tileMap.resize(height);
     for (int row = 0; row < height; ++row) {
         tileMap[row].resize(width, nullptr);
@@ -39,8 +40,12 @@ Level::Level(const int height, const int width, AbstractController* ui) : height
                     switchTile = dynamic_cast<Switch*>(tileMap[row][col]);
                     break;
                 case 'O':{
-                    tileMap[row][col] = new Portal(row, col, nullptr);
+                    tileMap[row][col] = new Portal(row, col);
                     portal.push_back(dynamic_cast<Portal*>(tileMap[row][col]));
+                    break;
+                }
+                case 'E':{
+                    tileMap[row][col] = new Levelchanger(row, col, this);
                     break;
                 }
                 default:
@@ -58,7 +63,6 @@ Level::Level(const int height, const int width, AbstractController* ui) : height
         portal[i+1]->setLabel(textureIndex);
     }
     if (switchTile != nullptr) for (Passive* passiveObj : passiveObjects) switchTile->attach(passiveObj);
-    placeCharacter(new Character(getTile(2,3), ui),2,3);
 }
 
 
@@ -94,4 +98,14 @@ void Level::placeCharacter(Character* c, int row, int col) {
 
     c->setTile(tile);
     addCharacter(c);
+}
+
+void Level::setMainCharacter(Character* character){
+    mainCharacter = character;
+    addCharacter(mainCharacter);
+}
+
+void Level::addCharacter(Character* character) {
+    for (Character* ch : characters) if (ch == character) return;
+    characters.push_back(character);
 }

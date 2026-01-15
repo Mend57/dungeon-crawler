@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QMainWindow>
 #include <ui_MainWindow.h>
+#include <QStatusBar>
 
 #include "../GraphicalUI.h"
 #include "../Input.h"
@@ -27,6 +28,7 @@ public:
     void formatArrow(std::pair<QPushButton*, std::string> button);
     void setDungeonCrawler(DungeonCrawler* dungeonCrawler){this->dungeonCrawler = dungeonCrawler;};
     Input getInput(){return lastInput;};
+    void updateStatusBar();
     ~MainWindow() override;
 
 private slots:

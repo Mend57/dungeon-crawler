@@ -1,30 +1,38 @@
 #ifndef DUNGEONCRAWLER_H
 #define DUNGEONCRAWLER_H
 
+#include <iostream>
+
 #include "AbstractView.h"
+#include "List.h"
 
 class DungeonCrawler {
   private:
     AbstractView* ui;
-    Level* level;
+    std::vector<Level*> levels;
+    Level* currentLevel;
 
   public:
-    DungeonCrawler(AbstractView* ui, Level* level) : ui(ui), level(level) {}
-    Level* getLevel(){return level;}
+    DungeonCrawler(AbstractView* ui, std::vector<Level*> levels) : ui(ui), levels(levels), currentLevel(levels.front()) {}
+    Level* getCurrentLevel(){return currentLevel;}
+    void setCurrentLevel(Level* level){currentLevel = level;}
 
     bool turn(){
-      for(Character* character : level->getCharacters()){
+      for(Character* character : currentLevel->getCharacters()){
         Input input = character->getController()->move();
         if(input.getExit() == true) return false;
         character->setMoveDirection(input);
 
         Tile* currentTile = character->getTile();
-        Tile* destTile = level->getTile(currentTile->getRow()+input.getDy(), currentTile->getColumn()+input.getDx());
+        Tile* destTile = currentLevel->getTile(currentTile->getRow()+input.getDy(), currentTile->getColumn()+input.getDx());
+        if (destTile->getTexture() == "E" && destTile != currentTile) {
+          if (currentLevel == levels.at(0)) currentLevel = levels.at(levels.size()-1);
+          else currentLevel = levels.at(0);
+        }
         currentTile->moveTo(destTile, character);
-
-        ui->draw(level);
-        return true;
       }
+      ui->draw(currentLevel);
+      return true;
     }
 };
 

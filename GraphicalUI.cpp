@@ -1,6 +1,7 @@
 #include "GraphicalUI.h"
 
 #include "Tiles/Door.h"
+#include "Tiles/Levelchanger.h"
 #include "Tiles/Pit.h"
 
 std::map<std::string, QPixmap> GraphicalUI::floorTextures;
@@ -28,7 +29,9 @@ GraphicalUI::GraphicalUI() {
 
     buildStringToLabelMap();
 
-    startScreen = new StartScreen(this);
+    std::vector<Level*> levels = buildLevels();
+
+    startScreen = new StartScreen(this, levels);
     mainWindow = new MainWindow(this);
 
     startScreen->show();
@@ -56,10 +59,12 @@ void GraphicalUI::buildStringToLabelMap() {
     stringToLabel["X"] = getTexture("door_closed");
     stringToLabel["/"] = getTexture("door_opened");
     stringToLabel["?"] = getTexture("switch");
+    stringToLabel["E"] = getTexture("levelchanger");
 }
 
 void GraphicalUI::draw(Level* level) {
     std::vector<std::vector<Tile*>> tileMap = level->getTileMap();
+    mainWindow->updateStatusBar();
     for (int row = 0; row < level->getHeight(); row++) {
         for (int col = 0; col < level->getWidth(); col++) {
             Tile* pos = tileMap[row][col];
@@ -67,18 +72,76 @@ void GraphicalUI::draw(Level* level) {
             label->setFixedSize(30,30);
             label->setScaledContents(true);
             label->setAttribute(Qt::WA_TranslucentBackground);
+            label->raise();
             mainWindow->addToGridLayout(label, row, col);
             if (pos->hasCharacter()) {
                 QLabel* characterLabel = pos->getCharacter()->getLabel();
                 characterLabel->setFixedSize(30,30);
                 characterLabel->setScaledContents(true);
                 characterLabel->setAttribute(Qt::WA_TranslucentBackground);
-                if (dynamic_cast<Pit*>(pos)) characterLabel->lower();
-                else characterLabel->raise();
+                if (dynamic_cast<Pit*>(pos)) {
+                    characterLabel->lower();
+                }
+                else {
+                    characterLabel->raise();
+                    characterLabel->raise();
+                }
                 mainWindow->addToGridLayout(characterLabel, row, col);
             }
         }
     }
+}
+
+std::vector<Level*> GraphicalUI::buildLevels(){
+    Level* level1 = new Level(10, 10, this, {
+          "##########"
+          "#O.......#"
+          "#...<....#"
+          "#..___...#"
+          "#..___...#"
+          "#........#"
+          "#######X##"
+          "#O......E#"
+          "#...?....#"
+          "##########"
+    });
+
+    Level* level2 = new Level(10, 10, this, {
+          "##########"
+          "#.O......#"
+          "#....<...#"
+          "#...__...#"
+          "#........#"
+          "#........#"
+          "#######X##"
+          "#O......E#"
+          "#...?....#"
+          "##########"
+      });
+    for (int i = 0; i < level1->getHeight(); i++) {
+        for (int j = 0; j < level1->getWidth(); j++) {
+            Tile* t1 = level1->getTile(i, j);
+            Tile* t2 = level2->getTile(i, j);
+            if (t1->getTexture() == "E") {
+                Levelchanger* lc1 = dynamic_cast<Levelchanger*>(t1);
+                if (lc1) lc1->setDestination(t2);
+            }
+
+            if (t2->getTexture() == "E") {
+                Levelchanger* lc2 = dynamic_cast<Levelchanger*>(t2);
+                if (lc2) lc2->setDestination(t1);
+            }
+        }
+    }
+    Character* mainCharacter = new Character(level1->getTile(2,3), this, 10, 10);
+    level1->setMainCharacter(mainCharacter);
+    level1->placeCharacter(mainCharacter,2,3);
+    level2->setMainCharacter(mainCharacter);
+
+    std::vector<Level*> levels;
+    levels.push_back(level1);
+    levels.push_back(level2);
+    return levels;
 }
 
 Input GraphicalUI::move() {return mainWindow->getInput();}

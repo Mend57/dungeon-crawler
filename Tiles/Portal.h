@@ -2,13 +2,13 @@
 #define PORTAL_H
 #include "Tile.h"
 
-class Portal : public Tile {
+class Portal : public virtual Tile {
     private:
-      Tile* destination;
       std::vector<std::string> portalTextures = {"portal1", "portal2", "portal3"};
+      Tile* destination;
 
     public:
-      Portal(const int row, const int column, Tile* destination) : Tile(row, column, "O"), destination(destination){}
+      Portal(const int row, const int column) : Tile(row, column, "O"), destination(nullptr){}
       Tile* getDestination(){return destination;}
       void setDestination(Tile* destination) {this->destination = destination;}
       void setLabel(int textureIndex) {label->setPixmap(GraphicalUI::getPortalTexture(portalTextures.at(textureIndex)));}

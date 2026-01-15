@@ -11,9 +11,15 @@ class Character {
       AbstractController* controller;
       QLabel* label = new QLabel();
       Input moveDirection = {0, 0};
+      int strength;
+      int stamina;
+      int hitpoints;
 
     public:
-      Character(Tile* tile, AbstractController* controller) : tile(tile), controller(controller) {setLabel();}
+      Character(Tile* tile, AbstractController* controller, int strength, int stamina) : tile(tile), controller(controller), strength(strength), stamina(stamina){
+          setLabel();
+          hitpoints = getMaxHP();
+      }
       virtual ~Character() = default;
       Tile* getTile(){return tile;}
       void setTile(Tile* tile){this->tile = tile;}
@@ -21,6 +27,10 @@ class Character {
       AbstractController* getController(){return controller;}
       void setLabel();
       QLabel* getLabel(){return label;}
+      int getMaxHP(){return 20+(strength*5);}
+      int getStrength(){return strength;}
+      int getStamina(){return stamina;}
+      int getHitpoints(){return hitpoints;}
 };
 
 #endif

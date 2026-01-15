@@ -3,7 +3,7 @@
 #include <QResizeEvent>
 #include <QPixmap>
 
-StartScreen::StartScreen(GraphicalUI* gui, QWidget *parent) : QDialog(parent), ui(new Ui::StartScreen), gui(gui) {
+StartScreen::StartScreen(GraphicalUI* gui, std::vector<Level*> levels, QWidget *parent) : QDialog(parent), ui(new Ui::StartScreen), gui(gui), levels(levels) {
     ui->setupUi(this);
     setWindowFlags(windowFlags() | Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint);
 
@@ -18,10 +18,9 @@ StartScreen::StartScreen(GraphicalUI* gui, QWidget *parent) : QDialog(parent), u
 }
 
 void StartScreen::onNewGameClicked() {
-    Level* level = new Level(10, 10, gui);
-    dungeonCrawler = new DungeonCrawler(gui, level);
-    dungeonCrawler->turn();
+    dungeonCrawler = new DungeonCrawler(gui, levels);
     gui->getMainWindow()->setDungeonCrawler(dungeonCrawler);
+    dungeonCrawler->turn();
     gui->switchWindow();
 }
 

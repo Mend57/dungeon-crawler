@@ -4,6 +4,8 @@
 MainWindow::MainWindow(GraphicalUI* gui, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), gui(gui) {
     ui->setupUi(this);
 
+    this->statusBar()->setStyleSheet("color: white; background-color: #222;");
+
     buttons = {
         {ui->arrow_up_left, "arrow_up_left"},
         {ui->arrow_up, "arrow_up"},
@@ -26,6 +28,18 @@ MainWindow::MainWindow(GraphicalUI* gui, QWidget *parent) : QMainWindow(parent),
     connect(ui->arrow_down, &QPushButton::clicked, this, &MainWindow::onDownArrowClicked);
     connect(ui->arrow_down_right, &QPushButton::clicked, this, &MainWindow::onDownRightArrowClicked);
 
+}
+
+void MainWindow::updateStatusBar() {
+    Character* character = dungeonCrawler->getCurrentLevel()->getMainCharacter();
+
+    QString statusText = QString("HP: %1/%2  |  Strength: %3  |  Stamina: %4")
+                        .arg(QString::number(character->getHitpoints()))
+                        .arg(QString::number(character->getMaxHP()))
+                        .arg(QString::number(character->getStrength()))
+                        .arg(QString::number(character->getStamina()));
+
+    this->statusBar()->showMessage(statusText);
 }
 
 void MainWindow::onUpLeftArrowClicked() {
