@@ -40,6 +40,7 @@ class DungeonCrawler {
       ui->draw(currentLevel);
       return true;
     }
+
 };
 
 #endif
