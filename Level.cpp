@@ -102,10 +102,17 @@ void Level::placeCharacter(Character* c, int row, int col) {
 
 void Level::setMainCharacter(Character* character){
     mainCharacter = character;
+    character->isMainCharacter();
     addCharacter(mainCharacter);
 }
 
 void Level::addCharacter(Character* character) {
     for (Character* ch : characters) if (ch == character) return;
     characters.push_back(character);
+}
+
+void Level::removeCharacter(Character* character) {
+    std::erase(characters, character);
+    character->getTile()->setCharacter(nullptr);
+    delete character;
 }

@@ -14,6 +14,7 @@ class Character {
       int strength;
       int stamina;
       int hitpoints;
+      bool isPlayer = false;
 
     public:
       Character(Tile* tile, AbstractController* controller, int strength, int stamina) : tile(tile), controller(controller), strength(strength), stamina(stamina){
@@ -26,6 +27,9 @@ class Character {
       void setMoveDirection(Input input){moveDirection = input;}
       AbstractController* getController(){return controller;}
       void setLabel();
+      void setHitpoints(int hitpoints){this->hitpoints = hitpoints;}
+      void isMainCharacter() {this->isPlayer = true;}
+      bool isCharacterPlayer() {return this->isPlayer;}
       QLabel* getLabel(){return label;}
       int getMaxHP(){return 20+(strength*5);}
       int getStrength(){return strength;}

@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "AbstractView.h"
+#include "GuardController.h"
 #include "List.h"
 
 class DungeonCrawler {
@@ -29,7 +30,12 @@ class DungeonCrawler {
           if (currentLevel == levels.at(0)) currentLevel = levels.at(levels.size()-1);
           else currentLevel = levels.at(0);
         }
-        currentTile->moveTo(destTile, character);
+        if (!currentTile->moveTo(destTile, character)) {
+          if (GuardController* guardController = dynamic_cast<GuardController *>(character->getController())) guardController->decrementIndex();
+        }
+        for (Character* ch : currentLevel->getCharacters()) {
+          if (ch->getHitpoints() <= 0) currentLevel->removeCharacter(ch);
+        }
       }
       ui->draw(currentLevel);
       return true;

@@ -26,7 +26,7 @@ class Level {
       const Tile* getTile(int row, int col) const;
       void placeCharacter(Character *c, int row, int col);
       void addCharacter(Character* character);
-      void removeCharacter(Character* character){std::erase(characters, character);}
+      void removeCharacter(Character* character);
 };
 
 #endif

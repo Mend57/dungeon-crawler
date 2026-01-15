@@ -1,5 +1,7 @@
 #include "GraphicalUI.h"
 
+#include "GuardController.h"
+#include "StationaryController.h"
 #include "Tiles/Door.h"
 #include "Tiles/Levelchanger.h"
 #include "Tiles/Pit.h"
@@ -8,6 +10,7 @@ std::map<std::string, QPixmap> GraphicalUI::floorTextures;
 std::map<std::string, QPixmap> GraphicalUI::portalTextures;
 std::map<std::string, QPixmap> GraphicalUI::stringToLabel;
 std::map<std::string, QPixmap> GraphicalUI::characterTextures;
+std::map<std::string, QPixmap> GraphicalUI::textures;
 
 GraphicalUI::GraphicalUI() {
     QDir dirTextures("../textures");
@@ -69,14 +72,16 @@ void GraphicalUI::draw(Level* level) {
         for (int col = 0; col < level->getWidth(); col++) {
             Tile* pos = tileMap[row][col];
             QLabel* label = pos->getLabel();
-            label->setFixedSize(30,30);
+            label->setMinimumSize(30,30);
+            label->setMaximumSize(300,300);
             label->setScaledContents(true);
             label->setAttribute(Qt::WA_TranslucentBackground);
             label->raise();
             mainWindow->addToGridLayout(label, row, col);
             if (pos->hasCharacter()) {
                 QLabel* characterLabel = pos->getCharacter()->getLabel();
-                characterLabel->setFixedSize(30,30);
+                characterLabel->setMinimumSize(30,30);
+                characterLabel->setMaximumSize(300,300);
                 characterLabel->setScaledContents(true);
                 characterLabel->setAttribute(Qt::WA_TranslucentBackground);
                 if (dynamic_cast<Pit*>(pos)) {
@@ -134,8 +139,14 @@ std::vector<Level*> GraphicalUI::buildLevels(){
         }
     }
     Character* mainCharacter = new Character(level1->getTile(2,3), this, 10, 10);
+    Character* stationary = new Character(level1->getTile(2,3), new StationaryController(), 10, 10);
+    Character* guard1 = new Character(level1->getTile(2,3), new GuardController(), 5, 5);
+    Character* guard2 = new Character(level1->getTile(2,3), new GuardController(), 5, 5);
     level1->setMainCharacter(mainCharacter);
     level1->placeCharacter(mainCharacter,2,3);
+    level1->placeCharacter(stationary,3,1);
+    level1->placeCharacter(guard1,5,5);
+    level1->placeCharacter(guard2,7,5);
     level2->setMainCharacter(mainCharacter);
 
     std::vector<Level*> levels;
