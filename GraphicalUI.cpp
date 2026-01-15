@@ -65,9 +65,9 @@ void GraphicalUI::buildStringToLabelMap() {
     stringToLabel["E"] = getTexture("levelchanger");
 }
 
-void GraphicalUI::draw(Level* level) {
+void GraphicalUI::drawLevel(Level* level){
     std::vector<std::vector<Tile*>> tileMap = level->getTileMap();
-    mainWindow->updateStatusBar();
+    mainWindow->clearGridLayout();
     for (int row = 0; row < level->getHeight(); row++) {
         for (int col = 0; col < level->getWidth(); col++) {
             Tile* pos = tileMap[row][col];
@@ -78,22 +78,30 @@ void GraphicalUI::draw(Level* level) {
             label->setAttribute(Qt::WA_TranslucentBackground);
             label->raise();
             mainWindow->addToGridLayout(label, row, col);
-            if (pos->hasCharacter()) {
-                QLabel* characterLabel = pos->getCharacter()->getLabel();
-                characterLabel->setMinimumSize(30,30);
-                characterLabel->setMaximumSize(300,300);
-                characterLabel->setScaledContents(true);
-                characterLabel->setAttribute(Qt::WA_TranslucentBackground);
-                if (dynamic_cast<Pit*>(pos)) {
-                    characterLabel->lower();
-                }
-                else {
-                    characterLabel->raise();
-                    characterLabel->raise();
-                }
-                mainWindow->addToGridLayout(characterLabel, row, col);
-            }
+
         }
+    }
+}
+
+void GraphicalUI::draw(Level* level) {
+    std::vector<std::vector<Tile*>> tileMap = level->getTileMap();
+    mainWindow->updateStatusBar();
+    for (Character* character : level->getCharacters()) {
+        QLabel* characterLabel = character->getLabel();
+        characterLabel->setMinimumSize(30,30);
+        characterLabel->setMaximumSize(300,300);
+        characterLabel->setScaledContents(true);
+        characterLabel->setAttribute(Qt::WA_TranslucentBackground);
+        int row = character->getTile()->getRow();
+        int col = character->getTile()->getColumn();
+        if (dynamic_cast<Pit*>(tileMap[row][col])) {
+            characterLabel->lower();
+        }
+        else {
+            characterLabel->raise();
+            characterLabel->raise();
+        }
+        mainWindow->addToGridLayout(characterLabel, row, col);
     }
 }
 
@@ -125,16 +133,16 @@ std::vector<Level*> GraphicalUI::buildLevels(){
       });
     for (int i = 0; i < level1->getHeight(); i++) {
         for (int j = 0; j < level1->getWidth(); j++) {
-            Tile* t1 = level1->getTile(i, j);
-            Tile* t2 = level2->getTile(i, j);
-            if (t1->getTexture() == "E") {
-                Levelchanger* lc1 = dynamic_cast<Levelchanger*>(t1);
-                if (lc1) lc1->setDestination(t2);
+            Tile* tile1 = level1->getTile(i, j);
+            Tile* tile2 = level2->getTile(i, j);
+            if (tile1->getTexture() == "E") {
+                Levelchanger* levelchanger1 = dynamic_cast<Levelchanger*>(tile1);
+                if (levelchanger1) levelchanger1->setDestination(tile2);
             }
 
-            if (t2->getTexture() == "E") {
-                Levelchanger* lc2 = dynamic_cast<Levelchanger*>(t2);
-                if (lc2) lc2->setDestination(t1);
+            if (tile2->getTexture() == "E") {
+                Levelchanger* levelchanger2 = dynamic_cast<Levelchanger*>(tile2);
+                if (levelchanger2) levelchanger2->setDestination(tile1);
             }
         }
     }

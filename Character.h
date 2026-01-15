@@ -28,13 +28,16 @@ class Character {
       AbstractController* getController(){return controller;}
       void setLabel();
       void setHitpoints(int hitpoints){this->hitpoints = hitpoints;}
-      void isMainCharacter() {this->isPlayer = true;}
       bool isCharacterPlayer() {return this->isPlayer;}
       QLabel* getLabel(){return label;}
       int getMaxHP(){return 20+(strength*5);}
       int getStrength(){return strength;}
       int getStamina(){return stamina;}
       int getHitpoints(){return hitpoints;}
+      void isMainCharacter(){
+          this->isPlayer = true;
+          setLabel();
+      }
 };
 
 #endif

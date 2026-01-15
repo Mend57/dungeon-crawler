@@ -30,6 +30,13 @@ public:
     Input getInput(){return lastInput;};
     void updateStatusBar();
     ~MainWindow() override;
+    void clearGridLayout() {
+        QLayoutItem* item;
+        while ((item = ui->gridLayout->takeAt(0)) != nullptr) {
+            if (item->widget()) item->widget()->setParent(nullptr);
+            delete item;
+        }
+    }
 
 private slots:
     void onUpLeftArrowClicked();

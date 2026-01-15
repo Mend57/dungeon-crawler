@@ -7,6 +7,7 @@ class Level;
 class AbstractView {
   public:
     virtual void draw(Level* level) = 0;
+    virtual void drawLevel(Level* level){};
     virtual ~AbstractView() = default;
 };
 

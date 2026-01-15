@@ -33,6 +33,7 @@ class GraphicalUI : public AbstractView, public AbstractController{
         static QPixmap getPortalTexture(const std::string& texture) {return portalTextures[texture];}
         static std::map<std::string, QPixmap> getPortalTextures() {return portalTextures;}
         void draw(Level* level) override;
+        void drawLevel(Level* level) override;
         Input move() override;
         static QPixmap getTexture(const std::string& texture) {return textures[texture];}
         static QPixmap getCharacterTexture(const std::string& texture) {return characterTextures[texture];}
