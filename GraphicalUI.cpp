@@ -78,7 +78,6 @@ void GraphicalUI::drawLevel(Level* level){
             label->setAttribute(Qt::WA_TranslucentBackground);
             label->raise();
             mainWindow->addToGridLayout(label, row, col);
-
         }
     }
 }
@@ -94,13 +93,8 @@ void GraphicalUI::draw(Level* level) {
         characterLabel->setAttribute(Qt::WA_TranslucentBackground);
         int row = character->getTile()->getRow();
         int col = character->getTile()->getColumn();
-        if (dynamic_cast<Pit*>(tileMap[row][col])) {
-            characterLabel->lower();
-        }
-        else {
-            characterLabel->raise();
-            characterLabel->raise();
-        }
+        if (dynamic_cast<Pit*>(tileMap[row][col])) characterLabel->lower();
+        else characterLabel->raise();
         mainWindow->addToGridLayout(characterLabel, row, col);
     }
 }

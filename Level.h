@@ -19,7 +19,7 @@ class Level {
       int getHeight() const{return height;}
       int getWidth() const{return width;}
       std::vector<std::vector<Tile*>> getTileMap(){return tileMap;}
-      std::vector<Character*> getCharacters(){return characters;}
+      std::vector<Character*>& getCharacters(){return characters;}
       Character* getMainCharacter(){return mainCharacter;}
       void setMainCharacter(Character* character);
       Tile* getTile(int row, int column);

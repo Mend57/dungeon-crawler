@@ -9,7 +9,7 @@ bool Tile::onLeave(Tile* destTile, Character* who){
       if (defender->getHitpoints() <= 0) return false;
       who->setHitpoints(who->getHitpoints() - defender->getStrength());
   }
-  if (!hasCharacter() || character != who || destTile->hasCharacter()) return false;
+  if (!hasCharacter() || destTile->hasCharacter()) return false;
   return true;
 }
 
