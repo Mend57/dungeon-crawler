@@ -6,6 +6,7 @@
 #include "Tiles/Ramp.h"
 #include "Tiles/Switch.h"
 #include "Tiles/Levelchanger.h"
+#include "Tiles/Lootchest.h"
 
 Level::Level(const int height, const int width, AbstractController* ui, std::string levelDesign) : height(height), width(width), l(levelDesign) {
     tileMap.resize(height);
@@ -46,6 +47,10 @@ Level::Level(const int height, const int width, AbstractController* ui, std::str
                 }
                 case 'E':{
                     tileMap[row][col] = new Levelchanger(row, col, this);
+                    break;
+                }
+                case 'V':{
+                    tileMap[row][col] = new Lootchest(row, col);
                     break;
                 }
                 default:

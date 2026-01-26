@@ -4,6 +4,7 @@
 #include "StationaryController.h"
 #include "Tiles/Door.h"
 #include "Tiles/Levelchanger.h"
+#include "Tiles/Lootchest.h"
 #include "Tiles/Pit.h"
 
 std::map<std::string, QPixmap> GraphicalUI::floorTextures;
@@ -63,6 +64,7 @@ void GraphicalUI::buildStringToLabelMap() {
     stringToLabel["/"] = getTexture("door_opened");
     stringToLabel["?"] = getTexture("switch");
     stringToLabel["E"] = getTexture("levelchanger");
+    stringToLabel["V"] = getTexture("chest");
 }
 
 void GraphicalUI::drawLevel(Level* level){
@@ -93,9 +95,11 @@ void GraphicalUI::draw(Level* level) {
         characterLabel->setAttribute(Qt::WA_TranslucentBackground);
         int row = character->getTile()->getRow();
         int col = character->getTile()->getColumn();
-        if (dynamic_cast<Pit*>(tileMap[row][col])) characterLabel->lower();
+        Tile* pos = tileMap[row][col];
+        if (dynamic_cast<Pit*>(pos)) characterLabel->lower();
         else characterLabel->raise();
         mainWindow->addToGridLayout(characterLabel, row, col);
+        if (character->isCharacterPlayer() && dynamic_cast<Lootchest*>(pos)) mainWindow->endGame(true);
     }
 }
 
@@ -122,7 +126,7 @@ std::vector<Level*> GraphicalUI::buildLevels(){
           "#........#"
           "#######X##"
           "#O......E#"
-          "#...?....#"
+          "#...?...V#"
           "##########"
       });
     for (int i = 0; i < level1->getHeight(); i++) {

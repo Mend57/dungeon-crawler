@@ -36,5 +36,10 @@ bool DungeonCrawler::turn(){
         ++it;
     }
     ui->draw(currentLevel);
+    bool mainCharactersAlive = false;
+    for (Character* ch : currentLevel->getCharacters()) {
+        if (ch->isCharacterPlayer()) mainCharactersAlive = true;
+    }
+    if (!mainCharactersAlive) return false;
     return true;
 }

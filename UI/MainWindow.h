@@ -29,6 +29,8 @@ public:
     void setDungeonCrawler(DungeonCrawler* dungeonCrawler){this->dungeonCrawler = dungeonCrawler;};
     Input getInput(){return lastInput;};
     void updateStatusBar();
+    void arrowClicked(Input input);
+    void endGame(bool win);
     ~MainWindow() override;
     void clearGridLayout() {
         QLayoutItem* item;

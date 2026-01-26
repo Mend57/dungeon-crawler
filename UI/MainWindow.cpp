@@ -42,42 +42,39 @@ void MainWindow::updateStatusBar() {
     this->statusBar()->showMessage(statusText);
 }
 
-void MainWindow::onUpLeftArrowClicked() {
-    lastInput = {-1,-1};
-    dungeonCrawler->turn();
+void MainWindow::onUpLeftArrowClicked() {arrowClicked({-1,-1});}
+void MainWindow::onUpArrowClicked() {arrowClicked({0,-1});}
+void MainWindow::onUpRightArrowClicked() {arrowClicked( {1,-1});}
+void MainWindow::onDownLeftArrowClicked() {arrowClicked({-1,1});}
+void MainWindow::onDownArrowClicked() {arrowClicked({0,1});}
+void MainWindow::onDownRightArrowClicked() {arrowClicked({1,1});}
+void MainWindow::onLeftArrowClicked() {arrowClicked({-1,0});}
+void MainWindow::onSkipArrowClicked() {arrowClicked({0,0});}
+void MainWindow::onRightArrowClicked() {arrowClicked({1,0});}
+
+void MainWindow::arrowClicked(Input input) {
+    lastInput = input;
+    if (!dungeonCrawler->turn()) endGame(false);
 }
-void MainWindow::onUpArrowClicked() {
-    lastInput = {0,-1};
-    dungeonCrawler->turn();
+
+void MainWindow::endGame(bool win) {
+    QDialog dialog;
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+    if (win) {
+        dialog.setWindowTitle("Congratulations!");
+        layout->addWidget(new QLabel("Congratulations! You won the game.\nYou reached the loot chest."));
+    }
+    else {
+        dialog.setWindowTitle("Game Over");
+        layout->addWidget(new QLabel("Game Over.\nAll players are dead."));
+    }
+    QPushButton *exitButton = new QPushButton("Exit");
+    layout->addWidget(exitButton);
+    connect(exitButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    dialog.exec();
+    QApplication::quit();
 }
-void MainWindow::onUpRightArrowClicked() {
-    lastInput = {1,-1};
-    dungeonCrawler->turn();
-}
-void MainWindow::onDownLeftArrowClicked() {
-    lastInput = {-1,1};
-    dungeonCrawler->turn();
-}
-void MainWindow::onDownArrowClicked() {
-    lastInput = {0,1};
-    dungeonCrawler->turn();
-}
-void MainWindow::onDownRightArrowClicked() {
-    lastInput = {1,1};
-    dungeonCrawler->turn();
-}
-void MainWindow::onLeftArrowClicked() {
-    lastInput = {-1,0};
-    dungeonCrawler->turn();
-}
-void MainWindow::onSkipArrowClicked() {
-    lastInput = {0,0};
-    dungeonCrawler->turn();
-}
-void MainWindow::onRightArrowClicked() {
-    lastInput = {1,0};
-    dungeonCrawler->turn();
-}
+
 void MainWindow::resizeEvent(QResizeEvent* event) {
     QMainWindow::resizeEvent(event);
 
