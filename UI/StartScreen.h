@@ -18,7 +18,7 @@ class StartScreen : public QDialog {
     Q_OBJECT
 
 public:
-    explicit StartScreen(GraphicalUI* gui, std::vector<Level*> levels, QWidget *parent = nullptr);
+    explicit StartScreen(GraphicalUI* gui, QWidget *parent = nullptr);
     DungeonCrawler* getDungeonCrawler(){return dungeonCrawler;}
     ~StartScreen() override;
 
@@ -29,7 +29,6 @@ private:
     Ui::StartScreen *ui;
     GraphicalUI* gui;
     DungeonCrawler* dungeonCrawler;
-    std::vector<Level*> levels;
 };
 
 #endif

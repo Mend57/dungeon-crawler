@@ -6,6 +6,7 @@
 #include "AbstractView.h"
 #include "GraphicalUI.h"
 #include "GuardController.h"
+#include "StationaryController.h"
 #include "List.h"
 
 class DungeonCrawler {
@@ -13,12 +14,19 @@ class DungeonCrawler {
     AbstractView* ui;
     std::vector<Level*> levels;
     Level* currentLevel;
+    void bindLevelchangers(std::vector<Level*> levels);
 
   public:
-    DungeonCrawler(AbstractView* ui, std::vector<Level*> levels) : ui(ui), levels(levels), currentLevel(levels.front()) {}
+    DungeonCrawler(AbstractView* ui) : ui(ui){
+      buildLevels();
+      currentLevel = levels.front();
+    }
     Level* getCurrentLevel(){return currentLevel;}
+    std::vector<Level*> buildLevels();
     void setCurrentLevel(Level* level){currentLevel = level;}
+    std::vector<Level*> getLevels(){return levels;}
     bool turn();
+
 };
 
 #endif
