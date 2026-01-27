@@ -11,9 +11,10 @@ class TerminalUI: public AbstractView, public AbstractController {
     DungeonCrawler* dungeonCrawler;
 
   public:
-    TerminalUI() : dungeonCrawler(new DungeonCrawler(this)) {dungeonCrawler->buildLevels();}
+    TerminalUI() : dungeonCrawler(new DungeonCrawler(this)){}
     void draw(Level* level) override;
     void drawLevel(Level* level) override{};
+    DungeonCrawler* getDungeonCrawler(){return dungeonCrawler;}
     Input move() override;
 };
 
