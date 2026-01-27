@@ -1,46 +1,40 @@
 #include "DungeonCrawler.h"
+#include "Tiles/Levelchanger.h"
 
 bool DungeonCrawler::turn(){
-    auto& characters = currentLevel->getCharacters();
-    auto it = characters.begin();
-    while (it != characters.end()) {
-        Character* character = *it;
-        for (auto jt = characters.begin(); jt != characters.end();) {
-            if ((*jt)->getHitpoints() <= 0) jt = characters.erase(jt);
-            ++jt;
-        }
-
+    for (Character* character : currentLevel->getCharacters()) {
         Input input = character->getController()->move();
         if(input.getExit() == true) return false;
         character->setMoveDirection(input);
-
         Tile* currentTile = character->getTile();
         Tile* destTile = currentLevel->getTile(currentTile->getRow()+input.getDy(), currentTile->getColumn()+input.getDx());
 
         if (destTile->getTexture() == "E" && destTile != currentTile) {
-            if (currentLevel == levels.at(0)) currentLevel = levels.at(levels.size()-1);
-            else currentLevel = levels.at(0);
+            currentLevel = dynamic_cast<Levelchanger*>(dynamic_cast<Levelchanger*>(destTile)->getDestination())->getLevel();
             currentTile->moveTo(destTile, character);
             ui->drawLevel(currentLevel);
+            ui->draw(currentLevel);
             break;
         }
 
-        if (!currentTile->moveTo(destTile, character)) {
+        if (!currentTile->moveTo(destTile, character) && destTile->hasCharacter()) {
             if (GuardController* guardController = dynamic_cast<GuardController *>(character->getController())) guardController->decrementIndex();
-            if (destTile->hasCharacter()) ui->drawLevel(currentLevel);
-        }
-        for (Character* ch : currentLevel->getCharacters()) {
-            if (ch->getHitpoints() <= 0) currentLevel->removeCharacter(ch);
         }
 
+        for (Character* ch : currentLevel->getCharacters()) {
+            if (!ch->isAlive()){
+                ch->getTile()->setCharacter(nullptr);
+                ch->clearLabel();
+            }
+        }
         ui->draw(currentLevel);
-        ++it;
     }
-    ui->draw(currentLevel);
+    for (Character* ch : currentLevel->getCharacters()) {
+        if (!ch->isAlive()) currentLevel->removeCharacter(ch);
+    }
     bool mainCharactersAlive = false;
     for (Character* ch : currentLevel->getCharacters()) {
         if (ch->isCharacterPlayer()) mainCharactersAlive = true;
     }
-    if (!mainCharactersAlive) return false;
-    return true;
+    return mainCharactersAlive;
 }

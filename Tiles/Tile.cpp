@@ -2,12 +2,16 @@
 #include "../GraphicalUI.h"
 
 bool Tile::onLeave(Tile* destTile, Character* who){
-  if (destTile == nullptr) return false;
+  if (destTile == nullptr || !who->isAlive()) return false;
   if (destTile->hasCharacter() && (destTile->getCharacter()->isCharacterPlayer() ^ who->isCharacterPlayer())) {
       Character* defender = destTile->getCharacter();
       defender->setHitpoints(defender->getHitpoints() - who->getStrength());
-      if (defender->getHitpoints() <= 0) return false;
+      if (defender->getHitpoints() <= 0) {
+        defender->die();
+        return false;
+      }
       who->setHitpoints(who->getHitpoints() - defender->getStrength());
+      if (who->getHitpoints() <= 0) who->die();
   }
   if (!hasCharacter() || destTile->hasCharacter()) return false;
   return true;

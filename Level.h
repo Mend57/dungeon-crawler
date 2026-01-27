@@ -8,9 +8,10 @@ class Level {
     private:
       std::vector<std::vector<Tile*>> tileMap;
       std::vector<Character*> characters;
-      Character* mainCharacter;
+      std::vector<Character*> mainCharacters;
       const int height;
       const int width;
+      std::vector<Tile*> levelchangers;
       std::string l;
 
     public:
@@ -18,9 +19,10 @@ class Level {
       ~Level();
       int getHeight() const{return height;}
       int getWidth() const{return width;}
+      std::vector<Tile*> getLevelchangers(){return levelchangers;}
       std::vector<std::vector<Tile*>> getTileMap(){return tileMap;}
       std::vector<Character*>& getCharacters(){return characters;}
-      Character* getMainCharacter(){return mainCharacter;}
+      std::vector<Character*> getMainCharacters(){return mainCharacters;}
       void setMainCharacter(Character* character);
       Tile* getTile(int row, int column);
       const Tile* getTile(int row, int col) const;

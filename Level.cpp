@@ -13,7 +13,7 @@ Level::Level(const int height, const int width, AbstractController* ui, std::str
     for (int row = 0; row < height; ++row) {
         tileMap[row].resize(width, nullptr);
     }
-    std::vector<Portal*> portal;
+    std::vector<Portal*> portals;
     std::vector<Passive*> passiveObjects;
     Switch* switchTile = nullptr;
     int counter = 0;
@@ -42,11 +42,12 @@ Level::Level(const int height, const int width, AbstractController* ui, std::str
                     break;
                 case 'O':{
                     tileMap[row][col] = new Portal(row, col);
-                    portal.push_back(dynamic_cast<Portal*>(tileMap[row][col]));
+                    portals.push_back(dynamic_cast<Portal*>(tileMap[row][col]));
                     break;
                 }
                 case 'E':{
                     tileMap[row][col] = new Levelchanger(row, col, this);
+                    levelchangers.push_back(dynamic_cast<Levelchanger*>(tileMap[row][col]));
                     break;
                 }
                 case 'V':{
@@ -59,13 +60,13 @@ Level::Level(const int height, const int width, AbstractController* ui, std::str
             counter++;
         }
     }
-    for (int i = 0; i < portal.size(); i+=2) {
-        portal[i]->setDestination(portal[i+1]);
-        portal[i+1]->setDestination(portal[i]);
+    for (int i = 0; i < portals.size(); i+=2) {
+        portals[i]->setDestination(portals[i+1]);
+        portals[i+1]->setDestination(portals[i]);
 
         int textureIndex = (i / 2) % GraphicalUI::getPortalTextures().size();
-        portal[i]->setLabel(textureIndex);
-        portal[i+1]->setLabel(textureIndex);
+        portals[i]->setLabel(textureIndex);
+        portals[i+1]->setLabel(textureIndex);
     }
     if (switchTile != nullptr) for (Passive* passiveObj : passiveObjects) switchTile->attach(passiveObj);
 }
@@ -106,9 +107,9 @@ void Level::placeCharacter(Character* c, int row, int col) {
 }
 
 void Level::setMainCharacter(Character* character){
-    mainCharacter = character;
+    mainCharacters.push_back(character);
     character->isMainCharacter();
-    addCharacter(mainCharacter);
+    addCharacter(character);
 }
 
 void Level::addCharacter(Character* character) {

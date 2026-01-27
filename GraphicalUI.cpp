@@ -96,6 +96,7 @@ void GraphicalUI::draw(Level* level) {
         int col = character->getTile()->getColumn();
         Tile* pos = tileMap[row][col];
         if (dynamic_cast<Pit*>(pos)) characterLabel->lower();
+        else characterLabel->raise();
         mainWindow->addToGridLayout(characterLabel, row, col);
         if (character->isCharacterPlayer() && dynamic_cast<Lootchest*>(pos)) mainWindow->endGame(true);
     }
@@ -123,40 +124,70 @@ std::vector<Level*> GraphicalUI::buildLevels(){
           "#........#"
           "#........#"
           "#######X##"
+          "#O....E.E#"
+          "#...?....#"
+          "##########"
+      });
+
+    Level* level3 = new Level(10, 10, this, {
+          "##########"
+          "#.O......#"
+          "#....<...#"
+          "#...__...#"
+          "#........#"
+          "#........#"
+          "#######X##"
           "#O......E#"
           "#...?...V#"
           "##########"
       });
-    for (int i = 0; i < level1->getHeight(); i++) {
-        for (int j = 0; j < level1->getWidth(); j++) {
-            Tile* tile1 = level1->getTile(i, j);
-            Tile* tile2 = level2->getTile(i, j);
-            if (tile1->getTexture() == "E") {
-                Levelchanger* levelchanger1 = dynamic_cast<Levelchanger*>(tile1);
-                if (levelchanger1) levelchanger1->setDestination(tile2);
-            }
-
-            if (tile2->getTexture() == "E") {
-                Levelchanger* levelchanger2 = dynamic_cast<Levelchanger*>(tile2);
-                if (levelchanger2) levelchanger2->setDestination(tile1);
-            }
-        }
-    }
-    Character* mainCharacter = new Character(level1->getTile(2,3), this, 10, 10);
-    Character* stationary = new Character(level1->getTile(2,3), new StationaryController(), 10, 10);
-    Character* guard1 = new Character(level1->getTile(2,3), new GuardController(), 5, 5);
-    Character* guard2 = new Character(level1->getTile(2,3), new GuardController(), 5, 5);
-    level1->setMainCharacter(mainCharacter);
-    level1->placeCharacter(mainCharacter,2,3);
-    level1->placeCharacter(stationary,3,1);
-    level1->placeCharacter(guard1,5,5);
-    level1->placeCharacter(guard2,7,5);
-    level2->setMainCharacter(mainCharacter);
 
     std::vector<Level*> levels;
     levels.push_back(level1);
     levels.push_back(level2);
+    levels.push_back(level3);
+
+    bindLevelchangers(levels);
+
+    std::vector<Character*> mainCharacters;
+    Character* mainCharacter1 = new Character(level1->getTile(2,3), this, 10, 10);
+    mainCharacters.push_back(mainCharacter1);
+    level1->placeCharacter(mainCharacter1,2,3);
+
+    for (Level* level : levels) {
+        for (Character* mc : mainCharacters) level->setMainCharacter(mc);
+    }
+
+    Character* stationary = new Character(level1->getTile(2,3), new StationaryController(), 10, 10);
+    Character* guard1 = new Character(level1->getTile(2,3), new GuardController(), 5, 5);
+    Character* guard2 = new Character(level1->getTile(2,3), new GuardController(), 5, 5);
+    level1->placeCharacter(stationary,3,1);
+    level1->placeCharacter(guard1,5,5);
+    level1->placeCharacter(guard2,7,5);
     return levels;
+}
+
+void GraphicalUI::bindLevelchangers(std::vector<Level*> levels) {
+    for (size_t i = 0; i + 1 < levels.size(); ++i) {
+        Levelchanger* lc1 = nullptr;
+        Levelchanger* lc2 = nullptr;
+        for (Tile* levelchanger : levels.at(i)->getLevelchangers()) {
+            Levelchanger* lc = dynamic_cast<Levelchanger*>(levelchanger);
+            if (lc->getDestination() == nullptr) {
+                lc1 = lc;
+                break;
+            }
+        }
+        for (Tile* levelchanger : levels.at(i+1)->getLevelchangers()) {
+            Levelchanger* lc = dynamic_cast<Levelchanger*>(levelchanger);
+            if (lc->getDestination() == nullptr) {
+                lc2 = lc;
+                break;
+            }
+        }
+        lc1->setDestination(lc2);
+        lc2->setDestination(lc1);
+    }
 }
 
 Input GraphicalUI::move() {return mainWindow->getInput();}

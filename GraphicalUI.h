@@ -22,6 +22,7 @@ class GraphicalUI : public AbstractView, public AbstractController{
         StartScreen* startScreen;
         MainWindow* mainWindow;
 
+        void bindLevelchangers(std::vector<Level*> levels);
         void buildStringToLabelMap();
         std::vector<Level*> buildLevels();
         void addFilesToMap(std::map<std::string, QPixmap>& map, const QFileInfoList& fileList);

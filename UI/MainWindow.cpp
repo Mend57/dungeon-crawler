@@ -31,7 +31,7 @@ MainWindow::MainWindow(GraphicalUI* gui, QWidget *parent) : QMainWindow(parent),
 }
 
 void MainWindow::updateStatusBar() {
-    Character* character = dungeonCrawler->getCurrentLevel()->getMainCharacter();
+    Character* character = dungeonCrawler->getCurrentLevel()->getMainCharacters().at(0);
 
     QString statusText = QString("HP: %1/%2  |  Strength: %3  |  Stamina: %4")
                         .arg(QString::number(character->getHitpoints() < 0 ? 0 : character->getHitpoints()))
