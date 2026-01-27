@@ -33,6 +33,7 @@ bool DungeonCrawler::turn(){
             if (ch->getHitpoints() <= 0) currentLevel->removeCharacter(ch);
         }
 
+        ui->draw(currentLevel);
         ++it;
     }
     ui->draw(currentLevel);

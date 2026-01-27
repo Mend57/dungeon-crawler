@@ -78,7 +78,6 @@ void GraphicalUI::drawLevel(Level* level){
             label->setMaximumSize(300,300);
             label->setScaledContents(true);
             label->setAttribute(Qt::WA_TranslucentBackground);
-            label->raise();
             mainWindow->addToGridLayout(label, row, col);
         }
     }
@@ -97,7 +96,6 @@ void GraphicalUI::draw(Level* level) {
         int col = character->getTile()->getColumn();
         Tile* pos = tileMap[row][col];
         if (dynamic_cast<Pit*>(pos)) characterLabel->lower();
-        else characterLabel->raise();
         mainWindow->addToGridLayout(characterLabel, row, col);
         if (character->isCharacterPlayer() && dynamic_cast<Lootchest*>(pos)) mainWindow->endGame(true);
     }

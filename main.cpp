@@ -7,6 +7,8 @@ int main(int argc, char *argv[]){
     QApplication app(argc, argv);
     GraphicalUI gui;
     return app.exec();
+
+    //TODO: add bloody frame, fix crashing when killing second enemy coming in my direction, fix list and iterator
 }
 
 
