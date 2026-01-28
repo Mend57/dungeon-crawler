@@ -19,7 +19,7 @@ StartScreen::StartScreen(GraphicalUI* gui, QWidget *parent) : QDialog(parent), u
 
 void StartScreen::onNewGameClicked() {
     dungeonCrawler = new DungeonCrawler(gui);
-    std::vector<Level*> levels = dungeonCrawler->getLevels();
+    List<Level*> levels = dungeonCrawler->getLevels();
     gui->getMainWindow()->setDungeonCrawler(dungeonCrawler);
     gui->drawLevel(levels.front());
     gui->draw(levels.front());

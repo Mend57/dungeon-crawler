@@ -1,140 +1,119 @@
 #include <cstddef>
 
-template<typename T>
+template <typename T>
 class List {
-  private:
+private:
     struct Element {
-      T* data;
-      Element* next;
-      Element* previous;
+        T data;
+        Element* prev;
+        Element* next;
     };
-    Element* start = nullptr;
-    Element* endElement = nullptr;
+    Element* head = nullptr;
+    Element* tail = nullptr;
     std::size_t m_size = 0;
 
-  class iterator {
-    friend class List;
+public:
+    class iterator {
+        friend class List;
+        private:
+            Element* element;
+            List* list;
+            iterator(Element* element, List* list) : element(element), list(list){}
 
-    public:
-      T*& operator*() const {
-        if (!elem) throw std::runtime_error("Dereferencing invalid iterator");
-        return elem->data;
-      }
+        public:
+            iterator() : element(nullptr), list(nullptr){}
+            bool operator==(const iterator& other) {return element == other.element && list == other.list;}
+            bool operator!=(const iterator& other) {return !(*this == other);}
 
-      iterator& operator++() {
-        if (!elem) throw std::runtime_error("Incrementing invalid iterator");
-        elem = elem->next;
-        return *this;
-      }
+            iterator& operator++() {
+                if (!list) throw std::runtime_error("Invalid iterator");
+                element = element->next;
+                return *this;
+            }
 
-      iterator& operator--() {
-        if (!list) throw std::runtime_error("Invalid iterator");
+            iterator& operator--() {
+                if (!list) throw std::runtime_error("Invalid iterator");
+                if (element == nullptr) {
+                    element = list->tail;
+                    return *this;
+                }
+                if (element->prev == nullptr) throw std::runtime_error("Decrementing begin iterator");
+                element = element->prev;
+                return *this;
+            }
 
-        if (!elem) {
-          if (!list->endElement) throw std::runtime_error("Decrementing end() of empty list");
-          elem = list->endElement;
-          return *this;
-        }
+            T& operator*() {
+                if (!element) throw std::runtime_error("Invalid iterator");
+                return element->data;
+            }
 
-        if (!elem->previous) throw std::runtime_error("Decrementing begin() iterator");
-        elem = elem->previous;
-        return *this;
-      }
+    };
 
-      bool operator==(const iterator& other) const {return list == other.list && elem == other.elem;};
-      bool operator!=(const iterator& other) const{  return !(*this == other);};
-
-    private:
-      iterator(List* list, Element* elem) : list(list), elem(elem) {};
-
-      List* list;
-      Element* elem;
-  };
-
-  public:
     List(){};
-    ~List(){while (start != nullptr) pop_back();};
+    std::size_t size() const {return m_size;}
+    bool empty() const {return m_size == 0;}
+    iterator begin() {return empty() ? end() : iterator(head, this);}
+    iterator end() {return iterator(nullptr, this);}
+    T& front() {return head->data;}
+    T& back() {return tail->data;}
 
-  void push_back(T* data) {
-    Element* tmp = new Element{data, nullptr, endElement};
-
-    if (empty()) start = endElement = tmp;
-    else {
-      endElement->next = tmp;
-      endElement = tmp;
-    }
-    m_size++;
-  }
-
-  void push_front(T* data) {
-    Element* tmp = new Element{data, start, nullptr};
-
-    if (empty()) start = endElement = tmp;
-    else {
-      start->previous = tmp;
-      start = tmp;
+    void push_back(T data) {
+        Element* tmp = new Element{data, tail, nullptr};
+        if (empty()) head = tail = tmp;
+        else {
+            tail->next = tmp;
+            tail = tmp;
+        }
+        ++m_size;
     }
 
-    m_size++;
-  }
-
-  void pop_back() {
-    if (empty()) throw std::runtime_error("List is empty");;
-
-    Element* toDelete = endElement;
-
-    if (start == endElement) start = endElement = nullptr;
-    else {
-      endElement = endElement->previous;
-      endElement->next = nullptr;
+    void push_front(T data) {
+        Element* tmp = new Element{data, nullptr, head};
+        if (empty()) head = tail = tmp;
+        else {
+            head->prev = tmp;
+            head = tmp;
+        }
+        ++m_size;
     }
 
-    delete toDelete;
-    m_size--;
-  }
-
-  void pop_front() {
-    if (empty()) throw std::runtime_error("List is empty");;
-
-    Element* toDelete = start;
-
-    if (start == endElement) start = endElement = nullptr;
-    else {
-      start = start->next;
-      start->previous = nullptr;
+    void pop_back() {
+        if (empty()) throw std::runtime_error("The list is empty");
+        Element* tmp = tail;
+        tail = tail->prev;
+        if (tail) tail->next = nullptr;
+        else head = nullptr;
+        delete tmp;
+        --m_size;
     }
 
-    delete toDelete;
-    m_size--;
-  }
-
-  void remove(T* data) {
-    Element* current = start;
-
-    while (current != nullptr) {
-      Element* next = current->next;
-
-      if (current->data == data) {
-        if (current == start) start = current->next;
-        if (current == endElement) endElement = current->previous;
-        if (current->previous) current->previous->next = current->next;
-        if (current->next) current->next->previous = current->previous;
-
-        delete current;
-        m_size--;
-      }
-      current = next;
+    void pop_front() {
+        if (empty()) throw std::runtime_error("The list is empty");
+        Element* tmp = head;
+        head = head->next;
+        if (head) head->prev = nullptr;
+        else tail = nullptr;
+        delete tmp;
+        --m_size;
     }
-  }
 
-  T* first() {
-    if (empty()) return nullptr;
-    return start->data;
-  }
+    void remove(T data) {
+        Element* current = head;
+        while (current) {
+            Element* next = current->next;
+            if (current->data == data) {
+                if (current->prev) current->prev->next = current->next;
+                else head = current->next;
 
-  std::size_t size() const {return m_size;};
-  bool empty() const {return m_size == 0;};
+                if (current->next) current->next->prev = current->prev;
+                else tail = current->prev;
 
-  iterator begin() {return iterator(this, start);}
-  iterator end(){return iterator(this, nullptr);}
+                delete current;
+                --m_size;
+            }
+            current = next;
+        }
+    }
+    
+    ~List() {while (!empty()) pop_back();}
 };

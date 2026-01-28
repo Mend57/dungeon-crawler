@@ -8,7 +8,7 @@ int main(int argc, char *argv[]){
     GraphicalUI gui;
     return app.exec();
 
-    //TODO: add bloody frame, fix list and iterator
+    //TODO: add bloody frame
 }
 
 

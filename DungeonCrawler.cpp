@@ -40,7 +40,7 @@ bool DungeonCrawler::turn(){
     return mainCharactersAlive;
 }
 
-std::vector<Level*> DungeonCrawler::buildLevels(){
+void DungeonCrawler::buildLevels(){
     AbstractController* controller = dynamic_cast<AbstractController*>(ui);
     Level* level1 = new Level(10, 10, controller, {
           "##########"
@@ -102,21 +102,24 @@ std::vector<Level*> DungeonCrawler::buildLevels(){
     level1->placeCharacter(stationary,3,1);
     level1->placeCharacter(guard1,5,5);
     level1->placeCharacter(guard2,7,5);
-    return levels;
 }
 
-void DungeonCrawler::bindLevelchangers(std::vector<Level*> levels) {
-    for (size_t i = 0; i + 1 < levels.size(); ++i) {
+void DungeonCrawler::bindLevelchangers(List<Level*>& levels) {
+    auto it = levels.begin();
+    auto next = it;
+    ++next;
+    while (next != levels.end()) {
         Levelchanger* lc1 = nullptr;
         Levelchanger* lc2 = nullptr;
-        for (Tile* levelchanger : levels.at(i)->getLevelchangers()) {
+
+        for (Tile* levelchanger : (*it)->getLevelchangers()) {
             Levelchanger* lc = dynamic_cast<Levelchanger*>(levelchanger);
             if (lc->getDestination() == nullptr) {
                 lc1 = lc;
                 break;
             }
         }
-        for (Tile* levelchanger : levels.at(i+1)->getLevelchangers()) {
+        for (Tile* levelchanger : (*next)->getLevelchangers()) {
             Levelchanger* lc = dynamic_cast<Levelchanger*>(levelchanger);
             if (lc->getDestination() == nullptr) {
                 lc2 = lc;
@@ -125,5 +128,9 @@ void DungeonCrawler::bindLevelchangers(std::vector<Level*> levels) {
         }
         lc1->setDestination(lc2);
         lc2->setDestination(lc1);
+
+        ++it;
+        ++next;
     }
 }
+

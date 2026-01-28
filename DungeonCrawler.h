@@ -12,10 +12,10 @@
 class DungeonCrawler {
   private:
     AbstractView* ui;
-    std::vector<Level*> levels;
+    List<Level*> levels;
     Level* currentLevel;
-    void bindLevelchangers(std::vector<Level*> levels);
-    std::vector<Level*> buildLevels();
+    void bindLevelchangers(List<Level*>& levels);
+    void buildLevels();
 
   public:
     DungeonCrawler(AbstractView* ui) : ui(ui){
@@ -24,7 +24,7 @@ class DungeonCrawler {
     }
     Level* getCurrentLevel(){return currentLevel;}
     void setCurrentLevel(Level* level){currentLevel = level;}
-    std::vector<Level*> getLevels(){return levels;}
+    List<Level*> getLevels(){return levels;}
     bool turn();
 };
 
