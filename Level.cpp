@@ -216,6 +216,10 @@ void Level::setMainCharacter(Character* character){
 
 void Level::addCharacter(Character* character) {
     for (Character* ch : characters) if (ch == character) return;
+    if (character->isCharacterPlayer()) {
+        characters.insert(characters.begin(), character);
+        return;
+    }
     characters.push_back(character);
 }
 

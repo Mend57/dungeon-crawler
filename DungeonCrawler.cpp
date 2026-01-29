@@ -10,9 +10,6 @@ DungeonCrawler::DungeonCrawler(AbstractView* ui, bool newGame) : ui(ui){
         currentLevel = levels.front();
         for (Level* level : levels) {
             for (Character* character : level->getCharacters()) character->setHitpoints(character->getMaxHP());
-            if (level != levels.front()) {
-                for (Character* mc : levels.front()->getMainCharacters()) level->setMainCharacter(mc);
-            }
         }
     }
     else {
@@ -81,7 +78,14 @@ void DungeonCrawler::buildLevels(QDir dir){
         Level* level = Level::CSVLoader(dynamic_cast<AbstractController*>(ui), stringPath);
         levels.push_back(level);
     }
-    for (Level* level : levels) bindLevelchangers(level);
+
+    for (Level* level : levels) {
+        if (level != levels.front()) {
+            for (Character* mc : levels.front()->getMainCharacters()) level->setMainCharacter(mc);
+        }
+
+        bindLevelchangers(level);
+    }
 }
 
 void DungeonCrawler::bindLevelchangers(Level* level) {
