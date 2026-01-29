@@ -7,15 +7,25 @@
 class Door : public Floor, public Wall, public Passive {
   private:
     bool isDoorOpen;
+    Level* level;
+    std::vector<Tile*> adjacentTiles;
 
   public:
-    Door(const int row, const int column) : Tile(row, column, "X"), Floor(row,column), Wall(row,column), isDoorOpen(false){Tile::setLabel();}
+    Door(const int row, const int column, Level* level) : Tile(row, column, "X"), Floor(row,column), Wall(row,column), level(level), isDoorOpen(false){Tile::setLabel();}
     bool isOpen() const {return isDoorOpen;}
+    void addAdjacent(Tile* tile) {adjacentTiles.push_back(tile);}
     std::pair<bool, Tile*> onEnter(Character* who) override {return isDoorOpen ? Floor::onEnter(who) :  Wall::onEnter(who);}
     void notify() override {
       isDoorOpen = !isDoorOpen;
       setTexture(isDoorOpen ? "/" : "X");
       Tile::setLabel();
+      if (isDoorOpen) setWalkable(true);
+      for (int i = 0; i < adjacentTiles.size(); i++) {
+        for (int j = i + 1; j < adjacentTiles.size(); j++) {
+          if (isDoorOpen) level->addEdge(adjacentTiles.at(i), adjacentTiles.at(j));
+          else level->removeEdge(adjacentTiles.at(i), adjacentTiles.at(j));
+        }
+      }
     }
 };
 

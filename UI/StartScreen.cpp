@@ -18,13 +18,22 @@ StartScreen::StartScreen(GraphicalUI* gui, QWidget *parent) : QDialog(parent), u
 }
 
 void StartScreen::onNewGameClicked() {
-    dungeonCrawler = new DungeonCrawler(gui, true);
+    initializeGame(true);
+}
+
+void StartScreen::initializeGame(bool newGame) {
+    dungeonCrawler = new DungeonCrawler(gui, newGame);
     std::vector<Level*> levels = dungeonCrawler->getLevels();
     gui->getMainWindow()->setDungeonCrawler(dungeonCrawler);
     gui->drawLevel(dungeonCrawler->getCurrentLevel());
     gui->draw(dungeonCrawler->getCurrentLevel());
     gui->switchWindow();
 }
+
+void StartScreen::keyPressEvent(QKeyEvent* event) {
+    if (event->key() == Qt::Key_L) initializeGame(false);
+}
+
 
 StartScreen::~StartScreen() {
     delete ui;

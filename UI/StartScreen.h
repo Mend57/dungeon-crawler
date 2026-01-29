@@ -29,6 +29,8 @@ private:
     Ui::StartScreen *ui;
     GraphicalUI* gui;
     DungeonCrawler* dungeonCrawler;
+    void keyPressEvent(QKeyEvent* event) override;
+    void initializeGame(bool newGame);
 };
 
 #endif

@@ -1,5 +1,6 @@
 #ifndef LEVEL_H
 #define LEVEL_H
+#include <iostream>
 #include <vector>
 
 #include "AbstractView.h"
@@ -20,6 +21,15 @@ class Level {
       void buildCharacters(std::ifstream& in, std::string& line);
       void bindSwitches(std::ifstream& in, std::string& line);
       void openDoors(std::ifstream& in, std::string& line);
+      struct Node {
+        int row;
+        int col;
+        int dist = INT_MAX;
+        bool visited = false;
+        Node* prev = nullptr;
+      };
+      std::vector<Node*> nodes;
+      std::unordered_map<Node*, std::vector<Node*>> graph;
 
     public:
       Level(int height, int width, AbstractController* ui, std::string map, std::string filename);
@@ -38,6 +48,23 @@ class Level {
       static Level* CSVLoader(AbstractController* ui, const std::string& filename);
       static std::vector<std::string> splitLine(const std::string& line, char delimiter = ',');
       std::string getFilename() {return filename;}
+      std::vector<Tile*> getPath(Tile* from, Tile* to);
+      void addEdge(Tile* tile1, Tile* tile2);
+      void removeEdge(Tile* tile1, Tile* tile2);
+      Node* getNode(int row, int col) {
+        for (Node* node : nodes) {
+          if (node->row == row && node->col == col){
+            return node;
+          }
+        }
+        return nullptr;
+      }
+
+      std::vector<Node*> getNeighbors(Node* node) {
+        static const std::vector<Node*> empty;
+        auto it = graph.find(node);
+        return (it != graph.end()) ? it->second : empty;
+      }
 };
 
 #endif

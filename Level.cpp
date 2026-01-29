@@ -1,5 +1,7 @@
 #include "Level.h"
 #include <fstream>
+#include <queue>
+
 #include "GraphicalUI.h"
 #include "Tiles/Door.h"
 #include "Tiles/Pit.h"
@@ -8,6 +10,7 @@
 #include "Tiles/Switch.h"
 #include "Tiles/Levelchanger.h"
 #include "Tiles/Lootchest.h"
+#include "AttackController.h"
 
 Level::Level(const int height, const int width, AbstractController* ui, std::string map, std::string filename) : height(height), width(width), ui(ui), map(map), filename(filename) {
     tileMap.resize(height);
@@ -29,7 +32,7 @@ Level::Level(const int height, const int width, AbstractController* ui, std::str
                 tileMap[row][col] = new Wall(row, col);
                 break;
             case 'X':
-                tileMap[row][col] = new Door(row, col);
+                tileMap[row][col] = new Door(row, col, this);
                 break;
             case '?':
                 tileMap[row][col] = new Switch(row, col);
@@ -46,9 +49,18 @@ Level::Level(const int height, const int width, AbstractController* ui, std::str
             default:
                 break;
             }
+            if (tileMap[row][col]->isWalkable()) nodes.push_back(new Node{row, col});
             counter++;
         }
     }
+
+    for (Node* node1 : nodes) {
+        for (Node* node2 : nodes) {
+            if (node1 == node2) continue;
+            if ((abs(node1->row - node2->row) <= 1) && (abs(node1->col - node2->col) <= 1)) graph[node1].push_back(node2);
+        }
+    }
+
     std::ifstream in(filename);
     std::string line;
     while (std::getline(in, line)) {
@@ -59,12 +71,64 @@ Level::Level(const int height, const int width, AbstractController* ui, std::str
     }
 }
 
+Level::~Level() {
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) delete tileMap[i][j];
+    }
+    tileMap.clear();
+    for (Character* character : characters) delete character;
+    characters.clear();
+}
+
+void Level::addEdge(Tile* tile1, Tile* tile2) {
+    bool exists = false;
+    Node* node1 = getNode(tile1->getRow(), tile1->getColumn());
+    Node* node2 = getNode(tile2->getRow(), tile2->getColumn());
+    if (!node1 || !node2 || node1 == node2) return;
+
+    for (Node* node : graph[node1]) {
+        if (node == node2) {
+            exists = true;
+            break;
+        }
+    }
+    if (!exists) graph[node1].push_back(node2);
+
+    exists = false;
+    for (Node* node : graph[node2]) {
+        if (node == node1) {
+            exists = true;
+            break;
+        }
+    }
+    if (!exists) graph[node2].push_back(node1);
+}
+
+void Level::removeEdge(Tile* tile1, Tile* tile2) {
+    Node* node1 = getNode(tile1->getRow(), tile1->getColumn());
+    Node* node2 = getNode(tile2->getRow(), tile2->getColumn());
+    if (!node1 || !node2 || node1 == node2) return;
+
+    auto& neighbors1 = graph[node1];
+    std::erase(neighbors1, node2);
+
+    auto& neighbors2 = graph[node2];
+    std::erase(neighbors2, node1);
+}
+
 void Level::openDoors(std::ifstream& in, std::string& line) {
     while (std::getline(in, line) && !line.empty()) {
         std::vector<std::string> tokens = splitLine(line);
         int row = std::stoi(tokens.at(0)), col = std::stoi(tokens.at(1));
         Door* door = dynamic_cast<Door*>(getTile(row, col));
         if (tokens.at(2) == "open") door->notify();
+        for (int deltaRow = -1; deltaRow <= 1; ++deltaRow) {
+            for (int deltaCol = -1; deltaCol <= 1; ++deltaCol) {
+                if (deltaRow == 0 && deltaCol == 0) continue;
+                Tile* neighborTile = getTile(row + deltaRow, col + deltaCol);
+                if (neighborTile && neighborTile->isWalkable()) door->addAdjacent(neighborTile);
+            }
+        }
     }
 }
 
@@ -99,6 +163,10 @@ void Level::buildCharacters(std::ifstream& in, std::string& line) {
             strength = 5, stamina = 5;
             dynamic_cast<GuardController*>(charController)->setIndex(std::stoi(tokens.at(5)));
         }
+        else if (controller == "attack") {
+            charController = new AttackController(this, getTile(row, col));
+            strength = 5, stamina = 5;
+        }
         if (charController == nullptr) continue;
         Character* character = new Character(getTile(row, col), charController, strength, stamina);
         character->setHitpoints(currentHP);
@@ -120,20 +188,6 @@ void Level::bindPortals(std::ifstream& in, std::string& line) {
         currentPortal->setLabel(textureIndex), destPortal->setLabel(textureIndex);
         portalTextureCounter++;
     }
-}
-
-Level::~Level() {
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            delete tileMap[i][j];
-        }
-    }
-    tileMap.clear();
-
-    for (Character* character : characters) {
-        delete character;
-    }
-    characters.clear();
 }
 
 Tile* Level::getTile(int row, int col){
@@ -204,4 +258,49 @@ Level* Level::CSVLoader(AbstractController* ui, const std::string& filename) {
         }
     }
     return new Level(height, width, ui, map, filename);
+}
+
+std::vector<Tile*> Level::getPath(Tile* fromTile, Tile* toTile) {
+    std::vector<Tile*> path;
+    if (!fromTile || !toTile) return path;
+    Node* start = getNode(fromTile->getRow(), fromTile->getColumn());
+    Node* goal = getNode(toTile->getRow(), toTile->getColumn());
+    //for (Node* node : nodes) std::cout << node->col << " " << node->row << std::endl;
+    if (!start || !goal) return path;
+    for (Node* node : nodes) {
+        node->dist = INT_MAX;
+        node->prev = nullptr;
+        node->visited = false;
+    }
+    start->dist = 0;
+    auto cmp = [](Node* a, Node* b) { return a->dist > b->dist; };
+    std::priority_queue<Node*, std::vector<Node*>, decltype(cmp)> pq(cmp);
+    pq.push(start);
+    while (!pq.empty()) {
+        Node* current = pq.top();
+        pq.pop();
+        if (current->visited) continue;
+        current->visited = true;
+        if (current == goal) break;
+        for (Node* neighbor : graph[current]) {
+            if (neighbor->visited) continue;
+            int newDist = current->dist + 1;
+            if (newDist < neighbor->dist) {
+                neighbor->dist = newDist;
+                neighbor->prev = current;
+                pq.push(neighbor);
+            }
+        }
+    }
+
+    Node* current = goal;
+    while (current != nullptr) {
+        Tile* t = getTile(current->row, current->col);
+        if (!t) break;
+        path.push_back(t);
+        current = current->prev;
+    }
+
+    std::ranges::reverse(path);
+    return path;
 }

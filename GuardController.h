@@ -11,7 +11,6 @@ class GuardController : public AbstractController {
 
   public:
     Input move() override {
-      std::cout << index << std::endl;
       if (index >= inputs.size()) index = 0;
       return inputs.at(index++);
     }

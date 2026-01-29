@@ -9,6 +9,7 @@ class Tile {
     const int row;
     const int column;
     std::string texture;
+    bool walkable = true;
 
   protected:
     QLabel* label = new QLabel();
@@ -31,6 +32,8 @@ class Tile {
     bool hasCharacter(){return character != nullptr;}
     QLabel* getLabel() {return label;}
     bool moveTo(Tile* destTile, Character* who);
+    bool isWalkable(){return walkable;}
+    void setWalkable(bool walkable){this->walkable = walkable;}
 };
 
 
