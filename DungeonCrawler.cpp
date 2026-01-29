@@ -10,6 +10,9 @@ DungeonCrawler::DungeonCrawler(AbstractView* ui, bool newGame) : ui(ui){
         currentLevel = levels.front();
         for (Level* level : levels) {
             for (Character* character : level->getCharacters()) character->setHitpoints(character->getMaxHP());
+            if (level != levels.front()) {
+                for (Character* mc : levels.front()->getMainCharacters()) level->setMainCharacter(mc);
+            }
         }
     }
     else {
@@ -31,7 +34,6 @@ bool DungeonCrawler::turn(){
         if (AttackController* attack_controller = dynamic_cast<AttackController*>(character->getController())) {
             attack_controller->setTile(character->getTile());
         }
-
         Input input = character->getController()->move();
         if(input.getExit() == true) return false;
         character->setMoveDirection(input);
@@ -78,9 +80,6 @@ void DungeonCrawler::buildLevels(QDir dir){
         std::string stringPath = path.toStdString();
         Level* level = Level::CSVLoader(dynamic_cast<AbstractController*>(ui), stringPath);
         levels.push_back(level);
-        if (level != levels.front()) {
-            for (Character* mc : levels.front()->getMainCharacters()) level->setMainCharacter(mc);
-        }
     }
     for (Level* level : levels) bindLevelchangers(level);
 }
@@ -128,6 +127,7 @@ void DungeonCrawler::saveGame() {
             else if (line == "#CHARACTERS") {
                 for (Character* ch : level->getCharacters()) {
                     bool mc = ch->isCharacterPlayer();
+                    if (mc && levels.front() != level) continue;
                     int row = ch->getTile()->getRow(), col = ch->getTile()->getColumn();
                     AbstractController* controller = ch->getController();
                     int currentHP = ch->getHitpoints();
@@ -137,7 +137,7 @@ void DungeonCrawler::saveGame() {
                     else if (dynamic_cast<GuardController*>(controller)) {
                         controllerType = "guard";
                         int movementIndex = dynamic_cast<GuardController*>(controller)->getIndex();
-                        out << (mc ? "main" : "npc") << "," << row << "," << col << "," << controllerType << "," << currentHP << "," << movementIndex << "\n";
+                        out << "npc" << "," << row << "," << col << "," << controllerType << "," << currentHP << "," << movementIndex << "\n";
                         continue;
                     }
                     out << (mc ? "main" : "npc") << "," << row << "," << col << "," << controllerType << "," << currentHP << "\n";

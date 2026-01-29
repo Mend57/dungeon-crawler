@@ -166,7 +166,6 @@ void Level::buildCharacters(std::ifstream& in, std::string& line) {
             charController = new AttackController(this, getTile(row, col));
             strength = 5, stamina = 5;
         }
-        if (charController == nullptr) continue;
         Character* character = new Character(getTile(row, col), charController, strength, stamina);
         character->setHitpoints(currentHP);
         placeCharacter(character, row, col);

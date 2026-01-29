@@ -88,8 +88,12 @@ void MainWindow::resizeEvent(QResizeEvent* event) {
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* event) {
+    if (event->key() == Qt::Key_W) onUpArrowClicked();
+    if (event->key() == Qt::Key_A) onLeftArrowClicked();
+    if (event->key() == Qt::Key_S) onDownArrowClicked();
+    if (event->key() == Qt::Key_D) onRightArrowClicked();
     if (event->key() == Qt::Key_O) dungeonCrawler->saveGame();
-    else if (event->key() == Qt::Key_L) {
+    if (event->key() == Qt::Key_L) {
         clearGridLayout();
         dungeonCrawler = new DungeonCrawler(gui, false);
         std::vector<Level*> levels = dungeonCrawler->getLevels();
