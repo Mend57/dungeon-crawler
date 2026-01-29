@@ -23,8 +23,8 @@ class AttackController : public AbstractController {
       std::vector<Character*> mainCharacters = level->getMainCharacters();
       target = mainCharacters.at(rand() % mainCharacters.size());
     }
+    void setTile(Tile* tile) {this->tile = tile;}
     Input move() override {
-
       Tile* targetTile = target->getTile();
       std::vector<Tile*> path = level->getPath(tile, targetTile);
       if (path.size() < 2) return {0,0};

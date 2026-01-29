@@ -21,19 +21,16 @@ class Door : public Floor, public Wall, public Passive {
       Tile::setLabel();
       if (isDoorOpen) {
         setWalkable(true);
-        // Quando a porta abre, conecta todos os tiles adjacentes entre si
         for (size_t i = 0; i < adjacentTiles.size(); i++) {
           for (size_t j = i + 1; j < adjacentTiles.size(); j++) {
             if (adjacentTiles[i] && adjacentTiles[j]) {
               level->addEdge(adjacentTiles[i], adjacentTiles[j]);
             }
           }
-          // Também conecta a porta aos tiles adjacentes
           level->addEdge(this, adjacentTiles[i]);
         }
       } else {
         setWalkable(false);
-        // Quando a porta fecha, remove todas as conexões
         for (size_t i = 0; i < adjacentTiles.size(); i++) {
           for (size_t j = i + 1; j < adjacentTiles.size(); j++) {
             if (adjacentTiles[i] && adjacentTiles[j]) {

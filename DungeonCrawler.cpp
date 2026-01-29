@@ -28,6 +28,10 @@ DungeonCrawler::DungeonCrawler(AbstractView* ui, bool newGame) : ui(ui){
 
 bool DungeonCrawler::turn(){
     for (Character* character : currentLevel->getCharacters()) {
+        if (AttackController* attack_controller = dynamic_cast<AttackController*>(character->getController())) {
+            attack_controller->setTile(character->getTile());
+        }
+
         Input input = character->getController()->move();
         if(input.getExit() == true) return false;
         character->setMoveDirection(input);
