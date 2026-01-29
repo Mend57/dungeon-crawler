@@ -19,14 +19,32 @@ class Door : public Floor, public Wall, public Passive {
       isDoorOpen = !isDoorOpen;
       setTexture(isDoorOpen ? "/" : "X");
       Tile::setLabel();
-      if (isDoorOpen) setWalkable(true);
-      for (int i = 0; i < adjacentTiles.size(); i++) {
-        for (int j = i + 1; j < adjacentTiles.size(); j++) {
-          if (isDoorOpen) level->addEdge(adjacentTiles.at(i), adjacentTiles.at(j));
-          else level->removeEdge(adjacentTiles.at(i), adjacentTiles.at(j));
+      if (isDoorOpen) {
+        setWalkable(true);
+        // Quando a porta abre, conecta todos os tiles adjacentes entre si
+        for (size_t i = 0; i < adjacentTiles.size(); i++) {
+          for (size_t j = i + 1; j < adjacentTiles.size(); j++) {
+            if (adjacentTiles[i] && adjacentTiles[j]) {
+              level->addEdge(adjacentTiles[i], adjacentTiles[j]);
+            }
+          }
+          // Também conecta a porta aos tiles adjacentes
+          level->addEdge(this, adjacentTiles[i]);
+        }
+      } else {
+        setWalkable(false);
+        // Quando a porta fecha, remove todas as conexões
+        for (size_t i = 0; i < adjacentTiles.size(); i++) {
+          for (size_t j = i + 1; j < adjacentTiles.size(); j++) {
+            if (adjacentTiles[i] && adjacentTiles[j]) {
+              level->removeEdge(adjacentTiles[i], adjacentTiles[j]);
+            }
+          }
+          level->removeEdge(this, adjacentTiles[i]);
         }
       }
     }
+
 };
 
 #endif

@@ -60,7 +60,6 @@ Level::Level(const int height, const int width, AbstractController* ui, std::str
             if ((abs(node1->row - node2->row) <= 1) && (abs(node1->col - node2->col) <= 1)) graph[node1].push_back(node2);
         }
     }
-
     std::ifstream in(filename);
     std::string line;
     while (std::getline(in, line)) {
@@ -265,7 +264,6 @@ std::vector<Tile*> Level::getPath(Tile* fromTile, Tile* toTile) {
     if (!fromTile || !toTile) return path;
     Node* start = getNode(fromTile->getRow(), fromTile->getColumn());
     Node* goal = getNode(toTile->getRow(), toTile->getColumn());
-    //for (Node* node : nodes) std::cout << node->col << " " << node->row << std::endl;
     if (!start || !goal) return path;
     for (Node* node : nodes) {
         node->dist = INT_MAX;

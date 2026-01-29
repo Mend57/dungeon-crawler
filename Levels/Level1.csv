@@ -8,19 +8,19 @@ height,10,width,10
 #..___...#
 #..___...#
 #........#
-#######X##
-#O......E#
-#...?....#
+#X#......#
+#O#.....E#
+#.#.?....#
 ##########
 
 #PORTALS
 1,1,7,1
 
 #DOORS
-6,7,closed
+6,1,closed
 
 #SWITCHES
-8,4,door,6,7
+8,4,door,6,1
 
 #LEVELCHANGERS
 7,8,level,2,7,6
@@ -29,3 +29,4 @@ height,10,width,10
 main,2,3,player,0
 npc,5,5,guard,0,0
 npc,8,5,attack,0
+npc,3,8,stationary,0

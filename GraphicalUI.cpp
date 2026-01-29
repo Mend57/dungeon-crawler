@@ -84,6 +84,7 @@ void GraphicalUI::drawLevel(Level* level){
 void GraphicalUI::draw(Level* level) {
     std::vector<std::vector<Tile*>> tileMap = level->getTileMap();
     mainWindow->updateStatusBar();
+
     for (Character* character : level->getCharacters()) {
         QLabel* characterLabel = character->getLabel();
         characterLabel->setMinimumSize(30,30);

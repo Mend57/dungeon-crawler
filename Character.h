@@ -38,6 +38,7 @@ class Character {
       int getHitpoints(){return hitpoints;}
       bool isAlive(){return alive;}
       void die(){alive = false;}
+      void setController(AbstractController* controller){this->controller = controller;}
       void isMainCharacter(){
           this->isPlayer = true;
           setLabel();
