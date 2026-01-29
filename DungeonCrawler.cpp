@@ -1,5 +1,6 @@
 #include "DungeonCrawler.h"
 
+#include "AttackController.h"
 #include "Tiles/Door.h"
 #include "Tiles/Levelchanger.h"
 
@@ -128,6 +129,7 @@ void DungeonCrawler::saveGame() {
                     int currentHP = ch->getHitpoints();
                     std::string controllerType = "player";
                     if (dynamic_cast<StationaryController*>(controller)) controllerType = "stationary";
+                    else if (dynamic_cast<AttackController*>(controller)) controllerType = "attack";
                     else if (dynamic_cast<GuardController*>(controller)) {
                         controllerType = "guard";
                         int movementIndex = dynamic_cast<GuardController*>(controller)->getIndex();
