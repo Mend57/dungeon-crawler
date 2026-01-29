@@ -62,11 +62,11 @@ void MainWindow::endGame(bool win) {
     QVBoxLayout *layout = new QVBoxLayout(&dialog);
     if (win) {
         dialog.setWindowTitle("Congratulations!");
-        layout->addWidget(new QLabel("Congratulations! You won the game.\nYou reached the loot chest."));
+        layout->addWidget(new QLabel("Congratulations! You won the game.\nYou've reached the loot chest."));
     }
     else {
         dialog.setWindowTitle("Game Over");
-        layout->addWidget(new QLabel("Game Over.\nAll players are dead."));
+        layout->addWidget(new QLabel("Game Over!\nAll players are dead."));
     }
     QPushButton *exitButton = new QPushButton("Exit");
     layout->addWidget(exitButton);
@@ -84,6 +84,18 @@ void MainWindow::resizeEvent(QResizeEvent* event) {
         button.first->setFixedSize(base, base);
         button.first->setIconSize(QSize(base, base));
         button.first->setStyleSheet("border:none");
+    }
+}
+
+void MainWindow::keyPressEvent(QKeyEvent* event) {
+    if (event->key() == Qt::Key_O) dungeonCrawler->saveGame();
+    else if (event->key() == Qt::Key_L) {
+        clearGridLayout();
+        dungeonCrawler = new DungeonCrawler(gui, false);
+        std::vector<Level*> levels = dungeonCrawler->getLevels();
+        gui->getMainWindow()->setDungeonCrawler(dungeonCrawler);
+        gui->drawLevel(dungeonCrawler->getCurrentLevel());
+        gui->draw(dungeonCrawler->getCurrentLevel());
     }
 }
 

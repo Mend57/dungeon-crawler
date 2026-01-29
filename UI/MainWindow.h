@@ -7,6 +7,7 @@
 #include <QMainWindow>
 #include <ui_MainWindow.h>
 #include <QStatusBar>
+#include <qevent.h>
 
 #include "../GraphicalUI.h"
 #include "../Input.h"
@@ -58,6 +59,7 @@ private:
     Input lastInput = {0,0};
     std::vector<std::pair<QPushButton*, std::string>> buttons;
     void resizeEvent(QResizeEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
 };
 
 #endif

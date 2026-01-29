@@ -11,10 +11,13 @@ class GuardController : public AbstractController {
 
   public:
     Input move() override {
+      std::cout << index << std::endl;
       if (index >= inputs.size()) index = 0;
       return inputs.at(index++);
     }
     void decrementIndex() {index--;}
+    void setIndex(int index) {this->index = index;}
+    int getIndex() {return index;}
 };
 
 #endif

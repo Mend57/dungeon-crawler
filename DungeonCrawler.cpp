@@ -1,6 +1,29 @@
 #include "DungeonCrawler.h"
 
+#include "Tiles/Door.h"
 #include "Tiles/Levelchanger.h"
+
+DungeonCrawler::DungeonCrawler(AbstractView* ui, bool newGame) : ui(ui){
+    buildLevels(newGame ? QDir("../Levels") : QDir("../Save"));
+    if (newGame) {
+        currentLevel = levels.front();
+        for (Level* level : levels) {
+            for (Character* character : level->getCharacters()) character->setHitpoints(character->getMaxHP());
+        }
+    }
+    else {
+        std::ifstream in("../Save/State.csv");
+        std::string line;
+        std::getline(in, line);
+        if (line == "#LOCATION") {
+            std::getline(in, line);
+            std::vector<std::string> tokens = Level::splitLine(line);
+            for (Level* level : levels) {
+                if (level->getFilename() == tokens.at(1)) currentLevel = level;
+            }
+        }
+    }
+}
 
 bool DungeonCrawler::turn(){
     for (Character* character : currentLevel->getCharacters()) {
@@ -10,7 +33,7 @@ bool DungeonCrawler::turn(){
         Tile* currentTile = character->getTile();
         Tile* destTile = currentLevel->getTile(currentTile->getRow()+input.getDy(), currentTile->getColumn()+input.getDx());
 
-        if (destTile->getTexture() == "E" && destTile != currentTile) {
+        if (destTile->getTexture() == "E" && destTile != currentTile && character->isCharacterPlayer()) {
             currentLevel = dynamic_cast<Levelchanger*>(dynamic_cast<Levelchanger*>(destTile)->getDestination())->getLevel();
             currentTile->moveTo(destTile, character);
             ui->drawLevel(currentLevel);
@@ -40,97 +63,84 @@ bool DungeonCrawler::turn(){
     return mainCharactersAlive;
 }
 
-void DungeonCrawler::buildLevels(){
-    AbstractController* controller = dynamic_cast<AbstractController*>(ui);
-    Level* level1 = new Level(10, 10, controller, {
-          "##########"
-          "#O.......#"
-          "#...<....#"
-          "#..___...#"
-          "#..___...#"
-          "#........#"
-          "#######X##"
-          "#O......E#"
-          "#...?....#"
-          "##########"
-    });
+void DungeonCrawler::buildLevels(QDir dir){
+    QDir levelsDir(dir);
+    QStringList filters;
+    filters << "*.csv";
+    QFileInfoList files = levelsDir.entryInfoList(filters, QDir::Files, QDir::Name);
+    for (const QFileInfo& fileInfo : files) {
+        QString path = fileInfo.filePath();
+        std::string stringPath = path.toStdString();
+        Level* level = Level::CSVLoader(dynamic_cast<AbstractController*>(ui), stringPath);
+        levels.push_back(level);
+        if (level != levels.front()) {
+            for (Character* mc : levels.front()->getMainCharacters()) level->setMainCharacter(mc);
+        }
+    }
+    for (Level* level : levels) bindLevelchangers(level);
+}
 
-    Level* level2 = new Level(10, 10, controller, {
-          "##########"
-          "#.O......#"
-          "#....<...#"
-          "#...__...#"
-          "#........#"
-          "#........#"
-          "#######X##"
-          "#O....E.E#"
-          "#...?....#"
-          "##########"
-      });
+void DungeonCrawler::bindLevelchangers(Level* level) {
+    std::ifstream in(level->getFilename());
+    std::string line;
+    while (std::getline(in, line)) {
+        if (line == "#LEVELCHANGERS") {
+            while (std::getline(in, line) && !line.empty()) {
+                std::vector<std::string> tokens = Level::splitLine(line);
+                int row = std::stoi(tokens.at(0)), col = std::stoi(tokens.at(1));
+                int destLevelIndex = std::stoi(tokens.at(3)) - 1;
+                int destRow = std::stoi(tokens.at(4)), destCol = std::stoi(tokens.at(5));
+                auto iter = levels.begin();
+                for (int i = 0; i < destLevelIndex; ++i) ++iter;
+                Level* destLevel = *iter;
+                dynamic_cast<Levelchanger*>(level->getTile(row, col))->setDestination(destLevel->getTile(destRow, destCol));
+            }
+        }
+    }
+}
 
-    Level* level3 = new Level(10, 10, controller, {
-          "##########"
-          "#.O......#"
-          "#....<...#"
-          "#...__...#"
-          "#........#"
-          "#........#"
-          "#######X##"
-          "#O......E#"
-          "#...?...V#"
-          "##########"
-      });
-
-    levels.push_back(level1);
-    levels.push_back(level2);
-    levels.push_back(level3);
-
-    bindLevelchangers(levels);
-
-    std::vector<Character*> mainCharacters;
-    Character* mainCharacter1 = new Character(level1->getTile(2,3), controller, 10, 10);
-    mainCharacters.push_back(mainCharacter1);
-    level1->placeCharacter(mainCharacter1,2,3);
-
+void DungeonCrawler::saveGame() {
+    std::ofstream state("../Save/State.csv");
+    std::string levelFileName = "../Save/" + std::filesystem::path(currentLevel->getFilename()).filename().string();
+    state << "#LOCATION\n" << "currentLevel," << levelFileName << "\n";
     for (Level* level : levels) {
-        for (Character* mc : mainCharacters) level->setMainCharacter(mc);
-    }
-
-    Character* stationary = new Character(level1->getTile(2,3), new StationaryController(), 10, 10);
-    Character* guard1 = new Character(level1->getTile(2,3), new GuardController(), 5, 5);
-    Character* guard2 = new Character(level1->getTile(2,3), new GuardController(), 5, 5);
-    level1->placeCharacter(stationary,3,1);
-    level1->placeCharacter(guard1,5,5);
-    level1->placeCharacter(guard2,7,5);
-}
-
-void DungeonCrawler::bindLevelchangers(List<Level*>& levels) {
-    auto it = levels.begin();
-    auto next = it;
-    ++next;
-    while (next != levels.end()) {
-        Levelchanger* lc1 = nullptr;
-        Levelchanger* lc2 = nullptr;
-
-        for (Tile* levelchanger : (*it)->getLevelchangers()) {
-            Levelchanger* lc = dynamic_cast<Levelchanger*>(levelchanger);
-            if (lc->getDestination() == nullptr) {
-                lc1 = lc;
-                break;
+        std::string baseFile = level->getFilename();
+        std::string destFile = "../Save/" + std::filesystem::path(baseFile).filename().string();
+        std::ifstream in(baseFile);
+        std::ofstream out(destFile);
+        std::string line;
+        while (std::getline(in, line)) {
+            out << line << "\n";
+            if (line == "#DOORS") {
+                while (std::getline(in, line) && !line.empty()) {
+                    std::vector<std::string> tokens = Level::splitLine(line);
+                    int row = std::stoi(tokens.at(0)), col = std::stoi(tokens.at(1));
+                    Door* door = dynamic_cast<Door*>(level->getTile(row, col));
+                    out << row << "," << col << "," << (door->isOpen() ? "open" : "closed") << "\n";
+                }
+                out << "\n";
+            }
+            else if (line == "#CHARACTERS") {
+                for (Character* ch : level->getCharacters()) {
+                    bool mc = ch->isCharacterPlayer();
+                    int row = ch->getTile()->getRow(), col = ch->getTile()->getColumn();
+                    AbstractController* controller = ch->getController();
+                    int currentHP = ch->getHitpoints();
+                    std::string controllerType = "player";
+                    if (dynamic_cast<StationaryController*>(controller)) controllerType = "stationary";
+                    else if (dynamic_cast<GuardController*>(controller)) {
+                        controllerType = "guard";
+                        int movementIndex = dynamic_cast<GuardController*>(controller)->getIndex();
+                        out << (mc ? "main" : "npc") << "," << row << "," << col << "," << controllerType << "," << currentHP << "," << movementIndex << "\n";
+                        continue;
+                    }
+                    out << (mc ? "main" : "npc") << "," << row << "," << col << "," << controllerType << "," << currentHP << "\n";
+                }
+                while (std::getline(in, line) && !line.empty()) {}
+                out << "\n";
             }
         }
-        for (Tile* levelchanger : (*next)->getLevelchangers()) {
-            Levelchanger* lc = dynamic_cast<Levelchanger*>(levelchanger);
-            if (lc->getDestination() == nullptr) {
-                lc2 = lc;
-                break;
-            }
-        }
-        lc1->setDestination(lc2);
-        lc2->setDestination(lc1);
-
-        ++it;
-        ++next;
     }
 }
+
 

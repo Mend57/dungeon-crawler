@@ -1,6 +1,7 @@
 #ifndef DUNGEONCRAWLER_H
 #define DUNGEONCRAWLER_H
 
+#include <fstream>
 #include <iostream>
 
 #include "AbstractView.h"
@@ -12,20 +13,19 @@
 class DungeonCrawler {
   private:
     AbstractView* ui;
-    List<Level*> levels;
+    std::vector<Level*> levels;
     Level* currentLevel;
-    void bindLevelchangers(List<Level*>& levels);
-    void buildLevels();
+    void bindLevelchangers(Level* level);
+    void addCharacters(Level* level);
 
   public:
-    DungeonCrawler(AbstractView* ui) : ui(ui){
-      buildLevels();
-      currentLevel = levels.front();
-    }
+    DungeonCrawler(AbstractView* ui, bool newGame);
     Level* getCurrentLevel(){return currentLevel;}
     void setCurrentLevel(Level* level){currentLevel = level;}
-    List<Level*> getLevels(){return levels;}
+    std::vector<Level*> getLevels(){return levels;}
     bool turn();
+    void saveGame();
+    void buildLevels(QDir dir);
 };
 
 #endif
