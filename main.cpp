@@ -1,6 +1,3 @@
-#include <QApplication>
-
-#include "DungeonCrawler.h"
 #include "GraphicalUI.h"
 
 int main(int argc, char *argv[]){
@@ -8,7 +5,7 @@ int main(int argc, char *argv[]){
     GraphicalUI gui;
     return app.exec();
 
-    //TODO: add bloody frame
+    //TODO: make pathfinding better and simpler, save->load->save->load problem
 }
 
 

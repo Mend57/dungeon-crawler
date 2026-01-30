@@ -1,6 +1,6 @@
 #ifndef TERMINALUI_H
 #define TERMINALUI_H
-#include "AbstractController.h"
+#include "controllers/AbstractController.h"
 #include "AbstractView.h"
 #include <iostream>
 #include <set>
@@ -14,7 +14,7 @@ class TerminalUI: public AbstractView, public AbstractController {
     TerminalUI() : dungeonCrawler(new DungeonCrawler(this, true)){}
     void draw(Level* level) override;
     void drawLevel(Level* level) override{};
-    DungeonCrawler* getDungeonCrawler(){return dungeonCrawler;}
+    DungeonCrawler* getDungeonCrawler() const {return dungeonCrawler;}
     Input move() override;
 };
 

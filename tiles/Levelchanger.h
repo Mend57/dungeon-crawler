@@ -9,7 +9,7 @@ class Levelchanger : public Portal {
 
   public:
     Levelchanger (const int row, const int column, Level* level) : Tile(row, column, "E"), Portal(row, column), level(level){};
-    Level* getLevel(){return level;}
+    Level* getLevel() const {return level;}
 };
 
 #endif

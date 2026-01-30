@@ -1,6 +1,5 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -8,7 +7,6 @@
 #include <ui_MainWindow.h>
 #include <QStatusBar>
 #include <qevent.h>
-
 #include "../GraphicalUI.h"
 #include "../Input.h"
 
@@ -25,15 +23,15 @@ Q_OBJECT
 
 public:
     explicit MainWindow(GraphicalUI* gui, QWidget *parent = nullptr);
-    void addToGridLayout(QLabel* label, int row, int column){ui->gridLayout->addWidget(label, row, column);}
+    void addToGridLayout(QLabel* label, const int row, const int column) const {ui->gridLayout->addWidget(label, row, column);}
     void formatArrow(std::pair<QPushButton*, std::string> button);
     void setDungeonCrawler(DungeonCrawler* dungeonCrawler){this->dungeonCrawler = dungeonCrawler;};
-    Input getInput(){return lastInput;};
-    void updateStatusBar();
+    Input getInput() const {return lastInput;};
+    void updateStatusBar() const;
     void arrowClicked(Input input);
     void endGame(bool win);
     ~MainWindow() override;
-    void clearGridLayout() {
+    void clearGridLayout() const {
         QLayoutItem* item;
         while ((item = ui->gridLayout->takeAt(0)) != nullptr) {
             if (item->widget()) item->widget()->setParent(nullptr);

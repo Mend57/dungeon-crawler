@@ -1,6 +1,5 @@
 #ifndef DUNGEONCRAWLER_STARTSCREEN_H
 #define DUNGEONCRAWLER_STARTSCREEN_H
-
 #include <QDialog>
 #include "../GraphicalUI.h"
 #include "../Level.h"
@@ -19,7 +18,7 @@ class StartScreen : public QDialog {
 
 public:
     explicit StartScreen(GraphicalUI* gui, QWidget *parent = nullptr);
-    DungeonCrawler* getDungeonCrawler(){return dungeonCrawler;}
+    DungeonCrawler* getDungeonCrawler() const {return dungeonCrawler;}
     ~StartScreen() override;
 
 private slots:

@@ -7,9 +7,9 @@ StartScreen::StartScreen(GraphicalUI* gui, QWidget *parent) : QDialog(parent), u
     ui->setupUi(this);
     setWindowFlags(windowFlags() | Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint);
 
-    ui->backgroundLabel->setPixmap(this->gui->getTexture("startscreen"));
+    ui->backgroundLabel->setPixmap(GraphicalUI::getTexture("startscreen"));
 
-    QPixmap buttonPixmap = this->gui->getTexture("new_game_button");
+    const QPixmap buttonPixmap = GraphicalUI::getTexture("new_game_button");
     ui->newGameButton->setIcon(buttonPixmap);
     ui->newGameButton->setIconSize(buttonPixmap.size());
     ui->newGameButton->setStyleSheet("border:none");

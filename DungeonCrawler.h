@@ -1,13 +1,11 @@
 #ifndef DUNGEONCRAWLER_H
 #define DUNGEONCRAWLER_H
-
 #include <fstream>
 #include <iostream>
-
 #include "AbstractView.h"
 #include "GraphicalUI.h"
-#include "GuardController.h"
-#include "StationaryController.h"
+#include "controllers/GuardController.h"
+#include "controllers/StationaryController.h"
 #include "List.h"
 
 class DungeonCrawler {
@@ -20,12 +18,12 @@ class DungeonCrawler {
 
   public:
     DungeonCrawler(AbstractView* ui, bool newGame);
-    Level* getCurrentLevel(){return currentLevel;}
+    Level* getCurrentLevel() const {return currentLevel;}
     void setCurrentLevel(Level* level){currentLevel = level;}
     std::vector<Level*> getLevels(){return levels;}
     bool turn();
     void saveGame();
-    void buildLevels(QDir dir);
+    void buildLevels(const QDir& dir);
 };
 
 #endif

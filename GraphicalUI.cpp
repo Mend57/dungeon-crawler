@@ -1,11 +1,10 @@
 #include "GraphicalUI.h"
-
-#include "GuardController.h"
-#include "StationaryController.h"
-#include "Tiles/Door.h"
-#include "Tiles/Levelchanger.h"
-#include "Tiles/Lootchest.h"
-#include "Tiles/Pit.h"
+#include "controllers/GuardController.h"
+#include "controllers/StationaryController.h"
+#include "tiles/Door.h"
+#include "tiles/Levelchanger.h"
+#include "tiles/Lootchest.h"
+#include "tiles/Pit.h"
 
 std::map<std::string, QPixmap> GraphicalUI::floorTextures;
 std::map<std::string, QPixmap> GraphicalUI::portalTextures;
@@ -49,7 +48,7 @@ void GraphicalUI::addFilesToMap(std::map<std::string, QPixmap>& map, const QFile
     }
 }
 
-void GraphicalUI::switchWindow() {
+void GraphicalUI::switchWindow() const {
     startScreen->hide();
     mainWindow->show();
 }
@@ -70,7 +69,7 @@ void GraphicalUI::drawLevel(Level* level){
     mainWindow->clearGridLayout();
     for (int row = 0; row < level->getHeight(); row++) {
         for (int col = 0; col < level->getWidth(); col++) {
-            Tile* pos = tileMap[row][col];
+            const Tile* pos = tileMap[row][col];
             QLabel* label = pos->getLabel();
             label->setMinimumSize(30,30);
             label->setMaximumSize(300,300);
@@ -91,8 +90,8 @@ void GraphicalUI::draw(Level* level) {
         characterLabel->setMaximumSize(300,300);
         characterLabel->setScaledContents(true);
         characterLabel->setAttribute(Qt::WA_TranslucentBackground);
-        int row = character->getTile()->getRow();
-        int col = character->getTile()->getColumn();
+        const int row = character->getTile()->getRow();
+        const int col = character->getTile()->getColumn();
         Tile* pos = tileMap[row][col];
         if (dynamic_cast<Pit*>(pos)) characterLabel->lower();
         else characterLabel->raise();

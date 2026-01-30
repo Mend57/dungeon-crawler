@@ -30,10 +30,10 @@ MainWindow::MainWindow(GraphicalUI* gui, QWidget *parent) : QMainWindow(parent),
 
 }
 
-void MainWindow::updateStatusBar() {
+void MainWindow::updateStatusBar() const{
     Character* character = dungeonCrawler->getCurrentLevel()->getMainCharacters().at(0);
 
-    QString statusText = QString("HP: %1/%2  |  Strength: %3  |  Stamina: %4")
+    const QString statusText = QString("HP: %1/%2  |  Strength: %3  |  Stamina: %4")
                         .arg(QString::number(character->getHitpoints() < 0 ? 0 : character->getHitpoints()))
                         .arg(QString::number(character->getMaxHP()))
                         .arg(QString::number(character->getStrength()))
@@ -52,12 +52,12 @@ void MainWindow::onLeftArrowClicked() {arrowClicked({-1,0});}
 void MainWindow::onSkipArrowClicked() {arrowClicked({0,0});}
 void MainWindow::onRightArrowClicked() {arrowClicked({1,0});}
 
-void MainWindow::arrowClicked(Input input) {
+void MainWindow::arrowClicked(const Input input) {
     lastInput = input;
     if (!dungeonCrawler->turn()) endGame(false);
 }
 
-void MainWindow::endGame(bool win) {
+void MainWindow::endGame(const bool win) {
     QDialog dialog;
     QVBoxLayout *layout = new QVBoxLayout(&dialog);
     if (win) {
@@ -78,9 +78,9 @@ void MainWindow::endGame(bool win) {
 void MainWindow::resizeEvent(QResizeEvent* event) {
     QMainWindow::resizeEvent(event);
 
-    int base = qMin(width(), height()) / 10;
+    const int base = qMin(width(), height()) / 10;
     for(std::pair<QPushButton*, std::string> button : buttons){
-        button.first->setIcon(this->gui->getTexture(button.second));
+        button.first->setIcon(GraphicalUI::getTexture(button.second));
         button.first->setFixedSize(base, base);
         button.first->setIconSize(QSize(base, base));
         button.first->setStyleSheet("border:none");

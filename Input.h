@@ -8,8 +8,8 @@ class Input{
     int exit;
 
   public:
-    Input(int dx, int dy) : dx(dx), dy(dy), exit(false){};
-    Input(int exit) : dx(0), dy(0), exit(exit){};
+    Input(const int dx, const int dy) : dx(dx), dy(dy), exit(false){};
+    Input(const int exit) : dx(0), dy(0), exit(exit){};
 
     int getExit() const{return exit;}
     int getDx() const{return dx;}

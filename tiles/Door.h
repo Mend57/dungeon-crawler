@@ -11,7 +11,7 @@ class Door : public Floor, public Wall, public Passive {
     std::vector<Tile*> adjacentTiles;
 
   public:
-    Door(const int row, const int column, Level* level) : Tile(row, column, "X"), Floor(row,column), Wall(row,column), level(level), isDoorOpen(false){Tile::setLabel();}
+    Door(const int row, const int column, Level* level) : Tile(row, column, "X"), Floor(row,column), Wall(row,column), isDoorOpen(false), level(level){Tile::setLabel();}
     bool isOpen() const {return isDoorOpen;}
     void addAdjacent(Tile* tile) {adjacentTiles.push_back(tile);}
     std::pair<bool, Tile*> onEnter(Character* who) override {return isDoorOpen ? Floor::onEnter(who) :  Wall::onEnter(who);}

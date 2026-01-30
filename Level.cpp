@@ -3,16 +3,16 @@
 #include <queue>
 
 #include "GraphicalUI.h"
-#include "Tiles/Door.h"
-#include "Tiles/Pit.h"
-#include "Tiles/Portal.h"
-#include "Tiles/Ramp.h"
-#include "Tiles/Switch.h"
-#include "Tiles/Levelchanger.h"
-#include "Tiles/Lootchest.h"
-#include "AttackController.h"
+#include "tiles/Door.h"
+#include "tiles/Pit.h"
+#include "tiles/Portal.h"
+#include "tiles/Ramp.h"
+#include "tiles/Switch.h"
+#include "tiles/Levelchanger.h"
+#include "tiles/Lootchest.h"
+#include "controllers/AttackController.h"
 
-Level::Level(const int height, const int width, AbstractController* ui, std::string map, std::string filename) : height(height), width(width), ui(ui), map(map), filename(filename) {
+Level::Level(const int height, const int width, AbstractController* ui, std::string map, const std::string& filename) : height(height), width(width), ui(ui), map(map), filename(filename) {
     tileMap.resize(height);
     for (int row = 0; row < height; ++row) tileMap[row].resize(width, nullptr);
     int counter = 0;
@@ -75,17 +75,17 @@ Level::~Level() {
         for (int j = 0; j < width; j++) delete tileMap[i][j];
     }
     tileMap.clear();
-    for (Character* character : characters) delete character;
+    for (const Character* character : characters) delete character;
     characters.clear();
 }
 
-void Level::addEdge(Tile* tile1, Tile* tile2) {
+void Level::addEdge(const Tile* tile1, const Tile* tile2) {
     bool exists = false;
     Node* node1 = getNode(tile1->getRow(), tile1->getColumn());
     Node* node2 = getNode(tile2->getRow(), tile2->getColumn());
     if (!node1 || !node2 || node1 == node2) return;
 
-    for (Node* node : graph[node1]) {
+    for (const Node* node : graph[node1]) {
         if (node == node2) {
             exists = true;
             break;
@@ -94,7 +94,7 @@ void Level::addEdge(Tile* tile1, Tile* tile2) {
     if (!exists) graph[node1].push_back(node2);
 
     exists = false;
-    for (Node* node : graph[node2]) {
+    for (const Node* node : graph[node2]) {
         if (node == node1) {
             exists = true;
             break;
@@ -103,7 +103,7 @@ void Level::addEdge(Tile* tile1, Tile* tile2) {
     if (!exists) graph[node2].push_back(node1);
 }
 
-void Level::removeEdge(Tile* tile1, Tile* tile2) {
+void Level::removeEdge(const Tile* tile1, const Tile* tile2) {
     Node* node1 = getNode(tile1->getRow(), tile1->getColumn());
     Node* node2 = getNode(tile2->getRow(), tile2->getColumn());
     if (!node1 || !node2 || node1 == node2) return;
@@ -118,7 +118,7 @@ void Level::removeEdge(Tile* tile1, Tile* tile2) {
 void Level::openDoors(std::ifstream& in, std::string& line) {
     while (std::getline(in, line) && !line.empty()) {
         std::vector<std::string> tokens = splitLine(line);
-        int row = std::stoi(tokens.at(0)), col = std::stoi(tokens.at(1));
+        const int row = std::stoi(tokens.at(0)), col = std::stoi(tokens.at(1));
         Door* door = dynamic_cast<Door*>(getTile(row, col));
         if (tokens.at(2) == "open") door->notify();
         for (int deltaRow = -1; deltaRow <= 1; ++deltaRow) {
@@ -134,9 +134,9 @@ void Level::openDoors(std::ifstream& in, std::string& line) {
 void Level::bindSwitches(std::ifstream& in, std::string& line) {
     while (std::getline(in, line) && !line.empty()){
         std::vector<std::string> tokens = splitLine(line);
-        int row = std::stoi(tokens.at(0)), col = std::stoi(tokens.at(1));
+        const int row = std::stoi(tokens.at(0)), col = std::stoi(tokens.at(1));
         for (int i = 3; i < tokens.size(); i+=3) {
-            int passiveRow = std::stoi(tokens.at(i)), passiveCol = std::stoi(tokens.at(i+1));
+            const int passiveRow = std::stoi(tokens.at(i)), passiveCol = std::stoi(tokens.at(i+1));
             dynamic_cast<Active*> (getTile(row, col))->attach(dynamic_cast<Passive*>(getTile(passiveRow, passiveCol)));
         }
     }
@@ -145,10 +145,10 @@ void Level::bindSwitches(std::ifstream& in, std::string& line) {
 void Level::buildCharacters(std::ifstream& in, std::string& line) {
     while (std::getline(in, line) && !line.empty()) {
         std::vector<std::string> tokens = splitLine(line);
-        std::string type = tokens.at(0);
-        int row = std::stoi(tokens.at(1)), col = std::stoi(tokens.at(2));
-        std::string controller = tokens.at(3);
-        int currentHP = std::stoi(tokens.at(4));
+        const std::string& type = tokens.at(0);
+        const int row = std::stoi(tokens.at(1)), col = std::stoi(tokens.at(2));
+        const std::string& controller = tokens.at(3);
+        const int currentHP = std::stoi(tokens.at(4));
         AbstractController* charController = nullptr;
         int strength = 0, stamina = 0;
         if (controller == "player") {
@@ -177,28 +177,28 @@ void Level::bindPortals(std::ifstream& in, std::string& line) {
     int portalTextureCounter = 0;
     while (std::getline(in, line) && !line.empty()){
         std::vector<std::string> tokens = splitLine(line);
-        int row = std::stoi(tokens.at(0)), col = std::stoi(tokens.at(1));
-        int destRow = std::stoi(tokens.at(2)), destCol = std::stoi(tokens.at(3));
+        const int row = std::stoi(tokens.at(0)), col = std::stoi(tokens.at(1));
+        const int destRow = std::stoi(tokens.at(2)), destCol = std::stoi(tokens.at(3));
         Portal* currentPortal = dynamic_cast<Portal*>(getTile(row, col));
         Portal* destPortal = dynamic_cast<Portal*>(getTile(destRow, destCol));
         currentPortal->setDestination(destPortal), destPortal->setDestination(currentPortal);
-        int textureIndex = (portalTextureCounter) % GraphicalUI::getPortalTextures().size();
+        const int textureIndex = (portalTextureCounter) % GraphicalUI::getPortalTextures().size();
         currentPortal->setLabel(textureIndex), destPortal->setLabel(textureIndex);
         portalTextureCounter++;
     }
 }
 
-Tile* Level::getTile(int row, int col){
+Tile* Level::getTile(const int row, const int col){
     if (row < 0 || row >= height || col < 0 || col >= width) return nullptr;
     return tileMap[row][col];
 }
 
-const Tile* Level::getTile(int row, int col) const {
+const Tile* Level::getTile(const int row, const int col) const {
     if (row < 0 || row >= height || col < 0 || col >= width) return nullptr;
     return tileMap[row][col];
 }
 
-void Level::placeCharacter(Character* c, int row, int col) {
+void Level::placeCharacter(Character* c, const int row, const int col) {
     if (row < 0 || row >= height || col < 0 || col >= width || c == nullptr) return;
     Tile* tile = getTile(row, col);
     if (tile == nullptr || tile->getTexture() != ".") return;
@@ -215,7 +215,7 @@ void Level::setMainCharacter(Character* character){
 }
 
 void Level::addCharacter(Character* character) {
-    for (Character* ch : characters) if (ch == character) return;
+    for (const Character* ch : characters) if (ch == character) return;
     if (character->isCharacterPlayer()) {
         characters.insert(characters.begin(), character);
         return;
@@ -262,11 +262,11 @@ Level* Level::CSVLoader(AbstractController* ui, const std::string& filename) {
     return new Level(height, width, ui, map, filename);
 }
 
-std::vector<Tile*> Level::getPath(Tile* fromTile, Tile* toTile) {
+std::vector<Tile*> Level::getPath(const Tile* from, const Tile* to) {
     std::vector<Tile*> path;
-    if (!fromTile || !toTile) return path;
-    Node* start = getNode(fromTile->getRow(), fromTile->getColumn());
-    Node* goal = getNode(toTile->getRow(), toTile->getColumn());
+    if (!from || !to) return path;
+    Node* start = getNode(from->getRow(), from->getColumn());
+    Node* goal = getNode(to->getRow(), to->getColumn());
     if (!start || !goal) return path;
     for (Node* node : nodes) {
         node->dist = INT_MAX;
@@ -274,7 +274,7 @@ std::vector<Tile*> Level::getPath(Tile* fromTile, Tile* toTile) {
         node->visited = false;
     }
     start->dist = 0;
-    auto cmp = [](Node* a, Node* b) { return a->dist > b->dist; };
+    auto cmp = [](const Node* a, const Node* b) { return a->dist > b->dist; };
     std::priority_queue<Node*, std::vector<Node*>, decltype(cmp)> pq(cmp);
     pq.push(start);
     while (!pq.empty()) {
@@ -285,7 +285,7 @@ std::vector<Tile*> Level::getPath(Tile* fromTile, Tile* toTile) {
         if (current == goal) break;
         for (Node* neighbor : graph[current]) {
             if (neighbor->visited) continue;
-            int newDist = current->dist + 1;
+            const int newDist = current->dist + 1;
             if (newDist < neighbor->dist) {
                 neighbor->dist = newDist;
                 neighbor->prev = current;
@@ -294,7 +294,7 @@ std::vector<Tile*> Level::getPath(Tile* fromTile, Tile* toTile) {
         }
     }
 
-    Node* current = goal;
+    const Node* current = goal;
     while (current != nullptr) {
         Tile* t = getTile(current->row, current->col);
         if (!t) break;

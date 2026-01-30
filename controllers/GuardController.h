@@ -15,8 +15,8 @@ class GuardController : public AbstractController {
       return inputs.at(index++);
     }
     void decrementIndex() {index--;}
-    void setIndex(int index) {this->index = index;}
-    int getIndex() {return index;}
+    void setIndex(const int index) {this->index = index;}
+    int getIndex() const {return index;}
 };
 
 #endif

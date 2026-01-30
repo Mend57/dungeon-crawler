@@ -9,9 +9,9 @@ class Portal : public virtual Tile {
 
     public:
       Portal(const int row, const int column) : Tile(row, column, "O"), destination(nullptr){}
-      Tile* getDestination(){return destination;}
+      Tile* getDestination() const {return destination;}
       void setDestination(Tile* destination) {this->destination = destination;}
-      void setLabel(int textureIndex) {label->setPixmap(GraphicalUI::getPortalTexture(portalTextures.at(textureIndex)));}
+      void setLabel(const int textureIndex) const {label->setPixmap(GraphicalUI::getPortalTexture(portalTextures.at(textureIndex)));}
       std::pair<bool, Tile*> onEnter(Character* who) override {return {!(destination->hasCharacter()), destination};}
 };
 

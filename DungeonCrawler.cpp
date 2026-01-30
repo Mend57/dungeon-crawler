@@ -1,10 +1,9 @@
 #include "DungeonCrawler.h"
+#include "controllers/AttackController.h"
+#include "tiles/Door.h"
+#include "tiles/Levelchanger.h"
 
-#include "AttackController.h"
-#include "Tiles/Door.h"
-#include "Tiles/Levelchanger.h"
-
-DungeonCrawler::DungeonCrawler(AbstractView* ui, bool newGame) : ui(ui){
+DungeonCrawler::DungeonCrawler(AbstractView* ui, const bool newGame) : ui(ui){
     buildLevels(newGame ? QDir("../Levels") : QDir("../Save"));
     if (newGame) {
         currentLevel = levels.front();
@@ -67,8 +66,8 @@ bool DungeonCrawler::turn(){
     return mainCharactersAlive;
 }
 
-void DungeonCrawler::buildLevels(QDir dir){
-    QDir levelsDir(dir);
+void DungeonCrawler::buildLevels(const QDir& dir){
+    const QDir& levelsDir(dir);
     QStringList filters;
     filters << "*.csv";
     QFileInfoList files = levelsDir.entryInfoList(filters, QDir::Files, QDir::Name);

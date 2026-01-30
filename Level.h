@@ -2,9 +2,8 @@
 #define LEVEL_H
 #include <iostream>
 #include <vector>
-
 #include "AbstractView.h"
-#include "Tiles/Tile.h"
+#include "tiles/Tile.h"
 #include "Character.h"
 
 class Level {
@@ -32,7 +31,7 @@ class Level {
       std::unordered_map<Node*, std::vector<Node*>> graph;
 
     public:
-      Level(int height, int width, AbstractController* ui, std::string map, std::string filename);
+      Level(int height, int width, AbstractController* ui, std::string map, const std::string& filename);
       ~Level();
       int getHeight() const{return height;}
       int getWidth() const{return width;}
@@ -48,10 +47,10 @@ class Level {
       static Level* CSVLoader(AbstractController* ui, const std::string& filename);
       static std::vector<std::string> splitLine(const std::string& line, char delimiter = ',');
       std::string getFilename() {return filename;}
-      std::vector<Tile*> getPath(Tile* from, Tile* to);
-      void addEdge(Tile* tile1, Tile* tile2);
-      void removeEdge(Tile* tile1, Tile* tile2);
-      Node* getNode(int row, int col) {
+      std::vector<Tile*> getPath(const Tile* from, const Tile* to);
+      void addEdge(const Tile* tile1, const Tile* tile2);
+      void removeEdge(const Tile* tile1, const Tile* tile2);
+      Node* getNode(const int row, const int col) {
         for (Node* node : nodes) {
           if (node->row == row && node->col == col){
             return node;
@@ -62,7 +61,7 @@ class Level {
 
       std::vector<Node*> getNeighbors(Node* node) {
         static const std::vector<Node*> empty;
-        auto it = graph.find(node);
+        const auto it = graph.find(node);
         return (it != graph.end()) ? it->second : empty;
       }
 };

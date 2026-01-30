@@ -1,6 +1,6 @@
 #ifndef DUNGEONCRAWLER_ABSTRACTCONTROLLER_H
 #define DUNGEONCRAWLER_ABSTRACTCONTROLLER_H
-#include "Input.h"
+#include "../Input.h"
 
 class AbstractController {
     public:

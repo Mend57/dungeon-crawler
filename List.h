@@ -49,7 +49,7 @@ public:
 
     };
 
-    List(){};
+    List()= default;
     std::size_t size() const {return m_size;}
     bool empty() const {return m_size == 0;}
     iterator begin() {return empty() ? end() : iterator(head, this);}
@@ -79,7 +79,7 @@ public:
 
     void pop_back() {
         if (empty()) throw std::runtime_error("The list is empty");
-        Element* tmp = tail;
+        const Element* tmp = tail;
         tail = tail->prev;
         if (tail) tail->next = nullptr;
         else head = nullptr;
@@ -89,7 +89,7 @@ public:
 
     void pop_front() {
         if (empty()) throw std::runtime_error("The list is empty");
-        Element* tmp = head;
+        const Element* tmp = head;
         head = head->next;
         if (head) head->prev = nullptr;
         else tail = nullptr;

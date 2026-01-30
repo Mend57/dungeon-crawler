@@ -1,7 +1,7 @@
 #include "Character.h"
 #include "GraphicalUI.h"
 
-void Character::setLabel(){
+void Character::setLabel() const{
     if (isPlayer) {
         if (moveDirection.getDx() == 1) label->setPixmap(GraphicalUI::getCharacterTexture("char_right_2"));
         else if (moveDirection.getDx() == -1) label->setPixmap(GraphicalUI::getCharacterTexture("char_left_2"));

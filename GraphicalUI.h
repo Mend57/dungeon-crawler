@@ -6,7 +6,7 @@
 #include "UI/StartScreen.h"
 #include "UI/MainWindow.h"
 #include "AbstractView.h"
-#include "AbstractController.h"
+#include "controllers/AbstractController.h"
 #include "DungeonCrawler.h"
 
 class MainWindow;
@@ -36,9 +36,9 @@ class GraphicalUI : public AbstractView, public AbstractController{
         Input move() override;
         static QPixmap getTexture(const std::string& texture) {return textures[texture];}
         static QPixmap getCharacterTexture(const std::string& texture) {return characterTextures[texture];}
-        StartScreen* getStartScreen(){return startScreen;}
-        MainWindow* getMainWindow(){return mainWindow;}
-        void switchWindow();
+        StartScreen* getStartScreen() const {return startScreen;}
+        MainWindow* getMainWindow() const {return mainWindow;}
+        void switchWindow() const;
 };
 
 #endif

@@ -12,7 +12,7 @@ class Active {
     void activate(){for (Passive* passiveObject : passiveObjects) passiveObject->notify();}
     void detach(Passive* passiveObject){std::erase(passiveObjects, passiveObject);}
     void attach(Passive* passiveObject) {
-      for (Passive* passiveObj : passiveObjects) if (passiveObj == passiveObject) return;
+      for (const Passive* passiveObj : passiveObjects) if (passiveObj == passiveObject) return;
       passiveObjects.push_back(passiveObject);
     }
 };

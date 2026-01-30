@@ -24,16 +24,16 @@ class Tile {
     virtual std::pair<bool, Tile*> onEnter(Character* who) = 0;
     virtual bool onLeave(Tile* destTile, Character* who);
     std::string getTexture(){return texture;}
-    Character* getCharacter(){return character;}
+    Character* getCharacter() const {return character;}
     int getRow() const{return row;}
     int getColumn() const{return column;}
     void setCharacter(Character* character){this->character = character;}
     void setTexture(std::string texture) {this->texture = std::move(texture);}
-    bool hasCharacter(){return character != nullptr;}
-    QLabel* getLabel() {return label;}
+    bool hasCharacter() const {return character != nullptr;}
+    QLabel* getLabel() const {return label;}
     bool moveTo(Tile* destTile, Character* who);
-    bool isWalkable(){return walkable;}
-    void setWalkable(bool walkable){this->walkable = walkable;}
+    bool isWalkable() const{return walkable;}
+    void setWalkable(const bool walkable){this->walkable = walkable;}
 };
 
 
